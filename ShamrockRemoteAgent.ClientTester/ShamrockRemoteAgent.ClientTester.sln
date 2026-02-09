@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShamrockRemoteAgent.ClientTester", "ShamrockRemoteAgent.ClientTester.csproj", "{6B3C5490-B054-4A59-A004-310C079CF93E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5192F3D2-5988-65E4-F1FD-7C1F119E617B} = {5192F3D2-5988-65E4-F1FD-7C1F119E617B}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShamrockRemoteAgent.TCPProtocol", "..\..\ShamrockRemoteAgent.TCPProtocol\ShamrockRemoteAgent.TCPProtocol.csproj", "{5192F3D2-5988-65E4-F1FD-7C1F119E617B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B3C5490-B054-4A59-A004-310C079CF93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B3C5490-B054-4A59-A004-310C079CF93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B3C5490-B054-4A59-A004-310C079CF93E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B3C5490-B054-4A59-A004-310C079CF93E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5192F3D2-5988-65E4-F1FD-7C1F119E617B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5192F3D2-5988-65E4-F1FD-7C1F119E617B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5192F3D2-5988-65E4-F1FD-7C1F119E617B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5192F3D2-5988-65E4-F1FD-7C1F119E617B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7EF5C564-B751-45F4-A43F-445474A0BD5B}
+	EndGlobalSection
+EndGlobal

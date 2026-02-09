@@ -1,0 +1,35 @@
+﻿namespace ShamrockRemoteAgent.TCPProtocol.Enums.Common
+{
+    public enum RPCommandEnum: ushort
+    {
+        NOT_INITIALIZED                              = 0,
+        RPCMD_RESET_DEVICE,
+        RPCMD_SET_ALL_FILTERS_STATES_TO_PASS         = 3,
+        RPCMD_SET_MESSAGE_FILTERING_FOR_J1939,
+        RPCMD_SET_MESSAGE_FILTERING_FOR_CAN,
+        RPCMD_SET_MESSAGE_FILTERING_FOR_ISO15765     = 9,
+        RPCMD_ECHO_TRANSMITTED_MESSAGES              = 16,
+        RPCMD_SET_ALL_FILTERS_STATES_TO_DISCARD,
+        RPCMD_SET_MESSAGE_RECEIVE,
+        RPCMD_PROTECT_J1939_ADDRESS,
+        RPCMD_SET_BROADCAST_FOR_CAN                  = 21,
+        RPCMD_SET_BROADCAST_FOR_J1939,
+        RPCMD_SET_J1939_FILTER_TYPE                  = 25,
+        RPCMD_SET_CAN_FILTER_TYPE,
+        RPCMD_SET_J1939_INTERPACKET_TIME,
+        RPCMD_SET_MAX_ERROR_MSG_SIZE,
+        RPCMD_DISALLOW_FURTHER_CONNECTIONS,
+        RPCMD_RELEASE_J1939_ADDRESS                  = 31,
+        RPCMD_SET_ISO15765_FILTER_TYPE,
+        RPCMD_SET_BROADCAST_FOR_ISO15765,
+        RPCMD_SET_ISO15765_FLOW_CONTROL,
+        RPCMD_CLEAR_ISO15765_FLOW_CONTROL,
+        RPCMD_SET_J1939_BAUD                         = 37,
+        RPCMD_SET_ISO15765_BAUD,
+        RPCMD_FLUSH_TX_RX_BUFFERS,
+        RPCMD_GET_PROTOCOL_CONNECTION_SPEED          = 45,
+        RPCMD_SET_CAN_BAUD                           = 47,
+        RPCMD_SET_BLOCK_TIMEOUT                      = 215,
+        RPCMD_SET_AUTORESET_ON_BUSOFF                = 256
+    }
+}

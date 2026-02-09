@@ -1,0 +1,3 @@
+[submodule "ShamrockRemoteAgent.TCPProtocol"]
+	path = ShamrockRemoteAgent.TCPProtocol
+	url = https://chris-heldeis@github.com/chris-heldeis/ShamrockRemoteAgent.TCPProtocol.git

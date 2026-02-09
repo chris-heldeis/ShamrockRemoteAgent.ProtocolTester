@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.HexViewerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="HexBox"
+             FontFamily="Consolas"
+             FontSize="12"
+             IsReadOnly="True"
+             Background="#020617"
+             Foreground="#E5E7EB"
+             VerticalScrollBarVisibility="Auto"
+             HorizontalScrollBarVisibility="Auto"
+             TextWrapping="Wrap"/>
+        <!-- Details -->
+        <TextBox x:Name="DetailsBox"
+             Grid.Row="1"
+             Margin="0,8,0,0"
+             FontFamily="Consolas"
+             FontSize="12"
+             Background="#020617"
+             Foreground="#E5E7EB"
+             IsReadOnly="True"
+             VerticalScrollBarVisibility="Auto"/>
+    </Grid>
+</UserControl>

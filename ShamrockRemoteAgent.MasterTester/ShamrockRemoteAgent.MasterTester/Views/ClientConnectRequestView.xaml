@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.ClientConnectRequestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid Margin="6">
+
+        <!-- Card -->
+        <Border Background="White"
+                CornerRadius="12"
+                Padding="24"
+                Width="600"
+                HorizontalAlignment="Left">
+
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20"
+                                  ShadowDepth="2"
+                                  Opacity="0.15"/>
+            </Border.Effect>
+
+            <StackPanel>
+
+                <!-- Header -->
+                <TextBlock Text="Client Connect Request"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+
+                <TextBlock Text="Build and send a client connection packet"
+                           Foreground="Gray"
+                           Margin="0,0,0,20"/>
+
+                <!-- Device ID -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Device ID"
+                               FontWeight="Medium"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="DeviceIdBox"
+                             Height="36"
+                             Text="1"/>
+                </StackPanel>
+
+                <!-- Protocol -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Protocol"
+                               FontWeight="Medium"
+                               Margin="0,0,0,6"/>
+                    <ComboBox x:Name="ProtocolBox"
+                              Height="36"/>
+                </StackPanel>
+
+                <!-- TX Buffer -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="TX Buffer Size"
+                               FontWeight="Medium"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="TxBufBox"
+                             Height="36"
+                             Text="0"/>
+                </StackPanel>
+
+                <!-- RX Buffer -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="RX Buffer Size"
+                               FontWeight="Medium"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="RxBufBox"
+                             Height="36"
+                             Text="0"/>
+                </StackPanel>
+
+                <!-- Self Packetize -->
+                <StackPanel Margin="0,0,0,24">
+                    <TextBlock Text="Self Packetize"
+                               FontWeight="Medium"
+                               Margin="0,0,0,6"/>
+                    <ComboBox x:Name="SelfPacketizeBox"
+                              Height="36"/>
+                </StackPanel>
+
+                <!-- Action -->
+                <Button Content="Build Packet"
+                        Height="40"
+                        Width="160"
+                        HorizontalAlignment="Left"
+                        FontWeight="SemiBold"
+                        Background="#3B82F6"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="OnBuildPacketClicked"/>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

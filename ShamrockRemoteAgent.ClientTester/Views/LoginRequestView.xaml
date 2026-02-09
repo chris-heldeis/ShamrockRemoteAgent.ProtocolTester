@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="ShamrockRemoteAgent.ClientTester.Views.LoginRequestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ShamrockRemoteAgent.ClientTester.ViewModels"
+             >
+
+    <UserControl.DataContext>
+        <vm:LoginRequestViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+        <Grid Margin="6">
+
+            <!-- Card -->
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="24"
+                    Width="600"
+                    HorizontalAlignment="Left">
+
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20"
+                                      ShadowDepth="2"
+                                      Opacity="0.15"/>
+                </Border.Effect>
+
+                <StackPanel>
+
+                    <!-- Header -->
+                    <TextBlock Text="Login Request"
+                               FontSize="22"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
+
+                    <TextBlock Text="Build and serialize login payload"
+                               Foreground="Gray"
+                               Margin="0,0,0,24"/>
+
+                    <!-- Customer ID -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Customer ID (32 bytes max)"
+                                   FontWeight="Medium"
+                                   Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding CustomerID}"
+                                 MaxLength="32"
+                                 Height="36"/>
+                    </StackPanel>
+
+                    <!-- Email -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Email (256 bytes max)"
+                                   FontWeight="Medium"
+                                   Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Email}"
+                                 MaxLength="256"
+                                 Height="36"/>
+                    </StackPanel>
+
+                    <!-- Device ID -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Device ID"
+                                   FontWeight="Medium"
+                                   Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding DeviceID}"
+                                 Height="36"/>
+                    </StackPanel>
+
+                    <!-- Protocol -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Protocol"
+                                   FontWeight="Medium"
+                                   Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding ProtocolValues}"
+                                  SelectedItem="{Binding Protocol}"
+                                  Height="36"/>
+                    </StackPanel>
+
+                    <!-- Adapter -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Adapter"
+                                   FontWeight="Medium"
+                                   Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding AdapterValues}"
+                                  SelectedItem="{Binding Adapter}"
+                                  Height="36"/>
+                    </StackPanel>
+
+                    <!-- Service Type -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Service Type"
+                                   FontWeight="Medium"
+                                   Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding ServiceTypeValues}"
+                                  SelectedItem="{Binding ServiceType}"
+                                  Height="36"/>
+                    </StackPanel>
+
+                    <!-- Other Service -->
+                    <StackPanel Margin="0,0,0,24">
+                        <TextBlock Text="Other Service (if applicable)"
+                                   FontWeight="Medium"
+                                   Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding OtherService}"
+                                 MaxLength="256"
+                                 Height="36"/>
+                    </StackPanel>
+
+                    <!-- Action -->
+                    <Button Content="Login"
+                            Width="160"
+                            Height="40"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Center"
+                            Background="#3B82F6"
+                            Foreground="White"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Click="OnBuildClicked"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,162 @@
+﻿<Window x:Class="ShamrockRemoteAgent.MasterTester.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:ShamrockRemoteAgent.MasterTester.Views"
+        Title="TCP Protocol Master Tester"
+        Width="1200"
+        Height="900"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource AppBackgroundBrush}"
+        Loaded="OnMainWindowLoaded"
+        Closing="OnMainWindowClosing">
+
+    <!-- ========================= -->
+    <!--  Resources (Theme-ready)  -->
+    <!-- ========================= -->
+    <Window.Resources>
+
+        <!-- Colors -->
+        <Color x:Key="LightBg">#F9FAFB</Color>
+        <Color x:Key="DarkBg">#0F172A</Color>
+        <Color x:Key="Primary">#3B82F6</Color>
+        <Color x:Key="SidebarBg">#111827</Color>
+        <Color x:Key="TextLight">#E5E7EB</Color>
+        <Color x:Key="TextDark">#111827</Color>
+
+        <!-- Brushes -->
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="{DynamicResource LightBg}" />
+        <SolidColorBrush x:Key="HeaderBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="SidebarBrush" Color="{DynamicResource SidebarBg}" />
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource Primary}" />
+        <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource TextDark}" />
+
+        <!-- Text styles -->
+        <Style x:Key="TitleText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+
+        <Style x:Key="SidebarItemStyle" TargetType="ListViewItem">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border CornerRadius="6"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#1F2937"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#374151"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <!-- ========================= -->
+    <!--          Layout           -->
+    <!-- ========================= -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===== Header ===== -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource HeaderBrush}"
+                Padding="20"
+                BorderBrush="#E5E7EB"
+                BorderThickness="0,0,0,1">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo + Title -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="36" Height="36" Fill="{DynamicResource PrimaryBrush}"/>
+                    <StackPanel Margin="12,0,0,0">
+                        <TextBlock Text="RP1210 TCP Protocol Master Tester" Style="{StaticResource TitleText}"/>
+                        <TextBlock Text="v1.0.0" FontSize="11" Foreground="Gray"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Date -->
+                <TextBlock Grid.Column="1"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Text="{Binding Today, StringFormat='{}{0:MMMM dd, yyyy}'}"
+                           Foreground="Gray"/>
+
+                <!-- Theme Toggle -->
+                <Button Grid.Column="2"
+                        Width="36"
+                        Height="36"
+                        Content="🌗"
+                        ToolTip="Toggle theme"
+                        Background="Transparent"
+                        BorderThickness="0"/>
+            </Grid>
+        </Border>
+
+        <!-- ===== Body ===== -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="680"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <Border Background="{DynamicResource SidebarBrush}" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Payloads"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource TextBrush}"
+                               Margin="8"/>
+
+                    <ListView x:Name="SidebarList" ItemContainerStyle="{StaticResource SidebarItemStyle}"
+                              SelectionChanged="SidebarList_SelectionChanged">
+                        <ListViewItem Content="Ping"/>
+                        <ListViewItem Content="Client Connect"/>
+                    </ListView>
+                </StackPanel>
+            </Border>
+
+            <!-- Main Content -->
+            <Border Grid.Column="1"
+                    Background="{DynamicResource AppBackgroundBrush}"
+                    Padding="24">
+
+                <!-- Swap views here -->
+                <ContentControl x:Name="MainContent">
+                    <views:PingRequestView/>
+                    <!-- or -->
+                    <!-- <views:ClientConnectRequestView/> -->
+                </ContentControl>
+
+            </Border>
+            <Border Grid.Column="2">
+                <!-- Hex Viewer -->
+                <views:HexViewerView Grid.Row="1"
+                         Margin="16,8,16,16"/>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
