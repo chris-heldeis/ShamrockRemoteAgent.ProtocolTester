@@ -24,11 +24,11 @@
         <Color x:Key="TextDark">#111827</Color>
 
         <!-- Brushes -->
-        <SolidColorBrush x:Key="AppBackgroundBrush" Color="{DynamicResource LightBg}" />
-        <SolidColorBrush x:Key="HeaderBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="{DynamicResource DarkBg}" />
+        <SolidColorBrush x:Key="HeaderBrush" Color="#020617" />
         <SolidColorBrush x:Key="SidebarBrush" Color="{DynamicResource SidebarBg}" />
         <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource Primary}" />
-        <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource TextDark}" />
+        <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource TextLight}" />
 
         <!-- Text styles -->
         <Style x:Key="TitleText" TargetType="TextBlock">
@@ -37,31 +37,83 @@
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         </Style>
 
+        <!-- Sidebar specific colors -->
+        <Color x:Key="SidebarBgDark">#0B1220</Color>
+        <Color x:Key="SidebarItemIdle">#0F172A</Color>
+        <Color x:Key="SidebarItemHover">#1E293B</Color>
+        <Color x:Key="SidebarItemSelected">#2563EB</Color>
+        <Color x:Key="SidebarText">#CBD5E1</Color>
+
+        <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="{StaticResource SidebarBgDark}"/>
+        <SolidColorBrush x:Key="SidebarTextBrush" Color="{StaticResource SidebarText}"/>
+        <SolidColorBrush x:Key="SidebarItemIdleBrush"
+                 Color="{StaticResource SidebarItemIdle}"/>
+        <SolidColorBrush x:Key="SidebarItemHoverBrush"
+                 Color="{StaticResource SidebarItemHover}"/>
+        <SolidColorBrush x:Key="SidebarItemSelectedBrush"
+                 Color="{StaticResource SidebarItemSelected}"/>
+
+        <!-- Sidebar title -->
+        <Style x:Key="SidebarSectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="Margin" Value="12,8,12,12"/>
+        </Style>
+
+        <!-- Sidebar item -->
         <Style x:Key="SidebarItemStyle" TargetType="ListViewItem">
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Margin" Value="6,2"/>
+            <Setter Property="Padding" Value="12,0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="{StaticResource SidebarItemIdleBrush}"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <Border CornerRadius="6"
-                                Background="{TemplateBinding Background}">
-                            <ContentPresenter/>
+                        <Border x:Name="Root"
+                        CornerRadius="8"
+                        Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"/>
                         </Border>
+
+                        <!-- Visual states -->
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#1F2937"/>
-                            </Trigger>
+
+                            <!-- Hover -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#374151"/>
+                                <Setter TargetName="Root"
+                                Property="Background"
+                                Value="{StaticResource SidebarItemHoverBrush}"/>
                             </Trigger>
+
+                            <!-- Selected -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Root"
+                                Property="Background"
+                                Value="{StaticResource SidebarItemSelectedBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+
+                            <!-- Selected + Hover (keep selected color) -->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Root"
+                                Property="Background"
+                                Value="{StaticResource SidebarItemSelectedBrush}"/>
+                            </MultiTrigger>
+
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
     </Window.Resources>
 
     <!-- ========================= -->
@@ -89,7 +141,6 @@
 
                 <!-- Logo + Title -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Ellipse Width="36" Height="36" Fill="{DynamicResource PrimaryBrush}"/>
                     <StackPanel Margin="12,0,0,0">
                         <TextBlock Text="RP1210 TCP Protocol Master Tester" Style="{StaticResource TitleText}"/>
                         <TextBlock Text="v1.0.0" FontSize="11" Foreground="Gray"/>
@@ -102,15 +153,6 @@
                            VerticalAlignment="Center"
                            Text="{Binding Today, StringFormat='{}{0:MMMM dd, yyyy}'}"
                            Foreground="Gray"/>
-
-                <!-- Theme Toggle -->
-                <Button Grid.Column="2"
-                        Width="36"
-                        Height="36"
-                        Content="🌗"
-                        ToolTip="Toggle theme"
-                        Background="Transparent"
-                        BorderThickness="0"/>
             </Grid>
         </Border>
 
@@ -122,20 +164,58 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Sidebar -->
-            <Border Background="{DynamicResource SidebarBrush}" Padding="16">
-                <StackPanel>
-                    <TextBlock Text="Payloads"
-                               FontSize="14"
-                               FontWeight="Bold"
-                               Foreground="{DynamicResource TextBrush}"
-                               Margin="8"/>
+            <!-- ===== Sidebar ===== -->
+            <Border Background="{StaticResource SidebarBackgroundBrush}"
+        Padding="12">
 
-                    <ListView x:Name="SidebarList" ItemContainerStyle="{StaticResource SidebarItemStyle}"
-                              SelectionChanged="SidebarList_SelectionChanged">
-                        <ListViewItem Content="Ping"/>
-                        <ListViewItem Content="Client Connect"/>
+                <StackPanel>
+
+                    <TextBlock Text="Payloads"
+                   Style="{StaticResource SidebarSectionTitle}"/>
+
+                    <ListView x:Name="SidebarList"
+                  ItemContainerStyle="{StaticResource SidebarItemStyle}"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  SelectionChanged="SidebarList_SelectionChanged">
+
+                        <ListViewItem Tag="Ping">
+                            <StackPanel Orientation="Horizontal" Margin="12">
+                                <TextBlock Text="📡" FontSize="14" Margin="0 0 5 0"/>
+                                <TextBlock Text="Ping"/>
+                            </StackPanel>
+                        </ListViewItem>
+
+                        <ListViewItem Tag="Client Connect">
+                            <StackPanel Orientation="Horizontal" Margin="12">
+                                <TextBlock Text="🔌" FontSize="14" Margin="0 0 5 0"/>
+                                <TextBlock Text="Client Connect"/>
+                            </StackPanel>
+                        </ListViewItem>
+
+                        <ListViewItem Tag="Client Disconnect">
+                            <StackPanel Orientation="Horizontal" Margin="12">
+                                <TextBlock Text="❌" FontSize="14" Margin="0 0 5 0"/>
+                                <TextBlock Text="Client Disconnect"/>
+                            </StackPanel>
+                        </ListViewItem>
+
+                        <ListViewItem Tag="Send Message">
+                            <StackPanel Orientation="Horizontal" Margin="12">
+                                <TextBlock Text="✉️" FontSize="14" Margin="0 0 5 0"/>
+                                <TextBlock Text="Send Message"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        
+                        <ListViewItem Tag="Read Message">
+                            <StackPanel Orientation="Horizontal" Margin="12">
+                                <TextBlock Text="✉️" FontSize="14" Margin="0 0 5 0"/>
+                                <TextBlock Text="Read Message"/>
+                            </StackPanel>
+                        </ListViewItem>
+
                     </ListView>
+
                 </StackPanel>
             </Border>
 

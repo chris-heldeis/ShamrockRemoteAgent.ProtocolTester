@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.ClientDisconnectRequestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid Margin="6">
+
+        <!-- Card -->
+        <Border Background="#020617"
+                CornerRadius="12"
+                Padding="24"
+                Width="600"
+                HorizontalAlignment="Left"
+                BorderBrush="#1E293B"
+                BorderThickness="1">
+
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="18"
+                                  ShadowDepth="2"
+                                  Opacity="0.35"
+                                  Color="Black"/>
+            </Border.Effect>
+
+            <StackPanel>
+
+                <!-- Header -->
+                <TextBlock Text="Client Disconnect Request"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E5E7EB"
+                           Margin="0,0,0,4"/>
+
+                <TextBlock Text="Disconnect a client from the active session"
+                           Foreground="#94A3B8"
+                           Margin="0,0,0,20"/>
+
+                <!-- Client ID -->
+                <StackPanel Margin="0,0,0,24">
+                    <TextBlock Text="Client ID"
+                               FontWeight="Medium"
+                               Foreground="#CBD5E1"
+                               Margin="0,0,0,6"/>
+
+                    <TextBox x:Name="ClientIdTextBox"
+                             Height="36"
+                             FontSize="18"
+                             Text="1"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             BorderBrush="#334155"/>
+                </StackPanel>
+
+                <!-- Action -->
+                <Button Content="Send Disconnect Request"
+                        Height="40"
+                        Width="220"
+                        HorizontalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Background="#DC2626"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="OnSendDisconnectClicked"/>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

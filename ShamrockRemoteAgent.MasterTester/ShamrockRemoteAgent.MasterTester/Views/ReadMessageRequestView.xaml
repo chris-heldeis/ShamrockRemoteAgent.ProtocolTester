@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.ReadMessageRequestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid Margin="6">
+
+        <!-- Card -->
+        <Border Background="#020617"
+                CornerRadius="12"
+                Padding="24"
+                Width="600"
+                HorizontalAlignment="Left">
+
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20"
+                                  ShadowDepth="2"
+                                  Opacity="0.15"/>
+            </Border.Effect>
+
+            <StackPanel>
+
+                <!-- Header -->
+                <TextBlock Text="Read Message Request"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E5E7EB"
+                           Margin="0,0,0,4"/>
+
+                <TextBlock Text="Read a message buffer from a connected client"
+                           Foreground="#94A3B8"
+                           Margin="0,0,0,20"/>
+
+                <!-- Client ID -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Client ID"
+                               FontWeight="Medium"
+                               Foreground="#E5E7EB"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="ClientIdBox"
+                             Height="36"
+                             FontSize="18"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             BorderBrush="#334155"
+                             Text="1"/>
+                </StackPanel>
+
+                <!-- Buffer Size -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Buffer Size (bytes)"
+                               FontWeight="Medium"
+                               Foreground="#E5E7EB"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="BufferSizeBox"
+                             Height="36"
+                             FontSize="18"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             BorderBrush="#334155"
+                             Text="0"/>
+                </StackPanel>
+
+                <!-- Block on Read -->
+                <StackPanel Margin="0,0,0,24">
+                    <TextBlock Text="Block on Read"
+                               FontWeight="Medium"
+                               Foreground="#E5E7EB"
+                               Margin="0,0,0,6"/>
+                    <ComboBox x:Name="BlockOnReadBox"
+                              FontSize="18"
+                              Height="36"
+                              Background="#020617"
+                              Foreground="#00005F"
+                              BorderBrush="#334155">
+                        <ComboBoxItem Content="BLOCKING_IO" />
+                        <ComboBoxItem Content="NON_BLOCKING_IO" />
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Action -->
+                <Button Content="Read Message"
+                        Height="40"
+                        Width="180"
+                        HorizontalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Background="#10B981"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="OnReadMessageClicked"/>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

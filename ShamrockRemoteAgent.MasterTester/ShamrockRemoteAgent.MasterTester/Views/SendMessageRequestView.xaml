@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.ClientConnectRequestView"
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.SendMessageRequestView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +11,7 @@
         <Border Background="#020617"
                 CornerRadius="12"
                 Padding="24"
-                Width="620"
+                Width="600"
                 HorizontalAlignment="Left"
                 BorderBrush="#1E293B"
                 BorderThickness="1">
@@ -26,113 +26,101 @@
             <StackPanel>
 
                 <!-- Header -->
-                <TextBlock Text="Client Connect Request"
+                <TextBlock Text="Send Message Request"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="#E5E7EB"
                            Margin="0,0,0,4"/>
 
-                <TextBlock Text="Build and send a client connection packet"
+                <TextBlock Text="Send a message buffer to a connected client"
                            Foreground="#94A3B8"
                            Margin="0,0,0,20"/>
 
-                <!-- Device ID -->
+                <!-- Client ID -->
                 <StackPanel Margin="0,0,0,16">
-                    <TextBlock Text="Device ID"
+                    <TextBlock Text="Client ID"
                                FontWeight="Medium"
                                Foreground="#CBD5E1"
                                Margin="0,0,0,6"/>
-                    <TextBox x:Name="DeviceIdBox"
+                    <TextBox x:Name="ClientIdBox"
                              Height="36"
-                             FontSize="18"
                              Text="1"
                              Background="#020617"
                              Foreground="#E5E7EB"
                              BorderBrush="#334155"/>
                 </StackPanel>
 
-                <!-- Protocol -->
+                <!-- Message Size -->
                 <StackPanel Margin="0,0,0,16">
-                    <TextBlock Text="Protocol"
+                    <TextBlock Text="Message Size (bytes)"
                                FontWeight="Medium"
                                Foreground="#CBD5E1"
                                Margin="0,0,0,6"/>
-                    <ComboBox x:Name="ProtocolBox"
-                              FontSize="18"
-                              Height="36"
-                              Foreground="#000055"
-                              BorderBrush="#334155"
-                              Background="#020617"
-                              Padding="4"
-                              HorizontalContentAlignment="Left">
-                        <ComboBox.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#020617"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2563EB"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#020617"/>
-                        </ComboBox.Resources>
-                    </ComboBox>
-                </StackPanel>
-
-                <!-- TX Buffer -->
-                <StackPanel Margin="0,0,0,16">
-                    <TextBlock Text="TX Buffer Size"
-                               FontWeight="Medium"
-                               Foreground="#CBD5E1"
-                               Margin="0,0,0,6"/>
-                    <TextBox x:Name="TxBufBox"
+                    <TextBox x:Name="MsgSizeBox"
                              Height="36"
-                             FontSize="18"
                              Text="0"
                              Background="#020617"
                              Foreground="#E5E7EB"
                              BorderBrush="#334155"/>
                 </StackPanel>
 
-                <!-- RX Buffer -->
+                <!-- Client Message -->
                 <StackPanel Margin="0,0,0,16">
-                    <TextBlock Text="RX Buffer Size"
+                    <TextBlock Text="Client Message (hex or text)"
                                FontWeight="Medium"
                                Foreground="#CBD5E1"
                                Margin="0,0,0,6"/>
-                    <TextBox x:Name="RxBufBox"
-                             Height="36"
-                             FontSize="18"
-                             Text="0"
+                    <TextBox x:Name="ClientMsgBox"
+                             Height="100"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
                              Background="#020617"
                              Foreground="#E5E7EB"
                              BorderBrush="#334155"/>
                 </StackPanel>
 
-                <!-- Self Packetize -->
+                <!-- Status on TX -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Status on TX"
+                               FontWeight="Medium"
+                               Foreground="#CBD5E1"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="StatusOnTxBox"
+                             Height="36"
+                             Text="0"
+                             IsReadOnly="True"
+                             Background="#020617"
+                             Foreground="#94A3B8"
+                             BorderBrush="#334155"/>
+                </StackPanel>
+
+                <!-- Block on Send -->
                 <StackPanel Margin="0,0,0,24">
-                    <TextBlock Text="Self Packetize"
+                    <TextBlock Text="Block on Send"
                                FontWeight="Medium"
                                Foreground="#CBD5E1"
                                Margin="0,0,0,6"/>
-                    <ComboBox x:Name="SelfPacketizeBox"
-                              FontSize="18"
-                              Height="36"
-                              Background="#020617"
-                              Foreground="#000055"
-                              BorderBrush="#334155">
-                        <ComboBox.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#020617"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2563EB"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#020617"/>
-                        </ComboBox.Resources>
-                    </ComboBox>
+                    <TextBox x:Name="BlockOnSendBox"
+                             Height="36"
+                             Text="0"
+                             IsReadOnly="True"
+                             Background="#020617"
+                             Foreground="#94A3B8"
+                             BorderBrush="#334155"/>
                 </StackPanel>
 
                 <!-- Action -->
-                <Button Content="Build Packet"
+                <Button Content="Send Message"
                         Height="40"
-                        Width="160"
+                        Width="180"
                         HorizontalAlignment="Center"
                         FontWeight="SemiBold"
-                        Background="#2563EB"
+                        Background="#10B981"
                         Foreground="White"
                         BorderThickness="0"
-                        Cursor="Hand"/>
+                        Cursor="Hand"
+                        Click="OnSendMessageClicked"/>
 
             </StackPanel>
         </Border>

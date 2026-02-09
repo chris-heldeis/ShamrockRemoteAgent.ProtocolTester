@@ -20,7 +20,10 @@ namespace ShamrockRemoteAgent.MasterTester
             if (SidebarList.SelectedItem is not ListViewItem item)
                 return;
 
-            switch (item.Content.ToString())
+            if (item.Tag is not string key)
+                return;
+
+            switch (item.Tag.ToString())
             {
                 case "Ping":
                     MainContent.Content = new PingRequestView();
@@ -28,6 +31,15 @@ namespace ShamrockRemoteAgent.MasterTester
 
                 case "Client Connect":
                     MainContent.Content = new ClientConnectRequestView();
+                    break;
+                case "Client Disconnect":
+                    MainContent.Content = new ClientDisconnectRequestView();
+                    break;
+                case "Send Message":
+                    MainContent.Content = new SendMessageRequestView();
+                    break;
+                case "Read Message":
+                    MainContent.Content = new ReadMessageRequestView();
                     break;
             }
         }
