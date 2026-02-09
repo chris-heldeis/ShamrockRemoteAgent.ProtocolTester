@@ -1,2 +1,0 @@
-# ShamrockRemoteAgent.TCPProtocol
-ShamrockRemoteAgent TCP Protocol implementation
