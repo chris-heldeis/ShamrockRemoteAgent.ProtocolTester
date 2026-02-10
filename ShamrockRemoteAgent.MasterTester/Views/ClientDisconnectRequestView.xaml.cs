@@ -1,6 +1,7 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +21,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
             {
                 if (!ushort.TryParse(ClientIdTextBox.Text, out ushort clientId))
                 {
-                    PacketBus.PublishLog("Invalid CLIENT_ID");
+                    PacketBus.PublishLog("Invalid Client ID");
                     return;
                 }
 
@@ -32,27 +33,34 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                         App.MasterId);
                 }
 
-                // CLIENT_ID → 2 bytes BE
-                byte[] payload =
+                // Build payload using protocol model
+                var payload = new ClientDisconnectReq
                 {
-                    (byte)(clientId >> 8),
-                    (byte)(clientId & 0xFF)
+                    ClientID = { FieldData = clientId }
                 };
 
+                byte[] payloadBytes = payload.Serialize();
+
+                // Build DataPacket
                 var packet = new DataPacket
                 {
                     PacketType = DataPacketTypeEnum.CLI_DISCON_REQ,
-                    PacketPayload = payload,
-                    PacketLength = (uint)(4 + 1 + payload.Length)
+                    PacketPayload = payloadBytes,
+                    PacketLength = (uint)(4 + 1 + payloadBytes.Length)
                 };
 
                 byte[] packetBytes = packet.Serialize();
 
-                // Show hex in HexViewer
-                PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent CLI_DISCON_REQ for ClientId={clientId}");
+                // Wrap with Broker protocol
+                byte[] brokerPacket =
+                    BrokerProtocol.Encode(PacketType.COM_DATA, packetBytes);
 
-                await App.BrokerSocket.SendAsync(packetBytes);
+                // Publish to HexViewer
+                PacketBus.Publish(packetBytes);
+                PacketBus.PublishLog($"Sent ClientDisconnectRequest (ClientID={clientId})");
+
+                // Send
+                await App.BrokerSocket.SendAsync(brokerPacket);
             }
             catch (Exception ex)
             {

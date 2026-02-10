@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.PingRequestView"
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.GetLastErrorMsgRequestView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
@@ -23,26 +23,55 @@
             <StackPanel>
 
                 <!-- Header -->
-                <TextBlock Text="Ping Request"
+                <TextBlock Text="Get Last Error Message"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="#E5E7EB"
                            Margin="0,0,0,6"/>
 
-                <TextBlock Text="Send a simple ping packet to verify connectivity"
+                <TextBlock Text="Retrieve the last error message for a client"
                            Foreground="#94A3B8"
                            Margin="0,0,0,28"/>
 
+                <!-- Client ID -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Client ID"
+                               FontWeight="Medium"
+                               Foreground="White"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="ClientIdBox"
+                             Height="36"
+                             FontSize="18"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             Text="1"/>
+                </StackPanel>
+
+                <!-- Error Code -->
+                <StackPanel Margin="0,0,0,24">
+                    <TextBlock Text="Error Code"
+                               FontWeight="Medium"
+                               Foreground="White"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="ErrorCodeBox"
+                             Height="36"
+                             FontSize="18"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             Text="0"/>
+                </StackPanel>
+
                 <!-- Action -->
-                <Button Content="Send Ping"
-                        Width="160"
+                <Button Content="Get Last Error Message"
+                        Width="260"
                         Height="42"
                         FontWeight="SemiBold"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Center"
                         Background="#2563EB"
                         Foreground="White"
                         BorderThickness="0"
-                        Cursor="Hand">
+                        Cursor="Hand"
+                        Click="OnGetLastErrorMsgClicked">
 
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -63,7 +92,6 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-
             </StackPanel>
         </Border>
     </Grid>

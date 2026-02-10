@@ -41,6 +41,21 @@ namespace ShamrockRemoteAgent.MasterTester
                 case "Read Message":
                     MainContent.Content = new ReadMessageRequestView();
                     break;
+                case "Send Command":
+                    MainContent.Content = new SendCommandRequestView();
+                    break;
+                case "ReadVersion":
+                    MainContent.Content = new ReadVersionRequestView();
+                    break;
+                case "GetErrorMsg":
+                    MainContent.Content = new GetErrorMsgRequestView();
+                    break;
+                case "Get Hardware Status":
+                    MainContent.Content = new GetHardwareStatusRequestView();
+                    break;
+                case "Get Last Error Msg":
+                    MainContent.Content = new GetLastErrorMsgRequestView();
+                    break;
             }
         }
         protected override async void OnClosed(EventArgs e)

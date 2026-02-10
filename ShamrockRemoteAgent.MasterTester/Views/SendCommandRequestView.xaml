@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.SendCommandRequestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid Margin="6">
+
+        <!-- Card -->
+        <Border Background="#020617"
+                CornerRadius="12"
+                Padding="24"
+                Width="600"
+                HorizontalAlignment="Left"
+                BorderBrush="#1E293B"
+                BorderThickness="1">
+
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="24"
+                                  ShadowDepth="2"
+                                  Opacity="0.25"/>
+            </Border.Effect>
+
+            <StackPanel>
+
+                <!-- Header -->
+                <TextBlock Text="Send Command Request"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E5E7EB"
+                           Margin="0,0,0,4"/>
+
+                <TextBlock Text="Send a command packet to a connected client"
+                           Foreground="#94A3B8"
+                           Margin="0,0,0,24"/>
+
+                <!-- Command Number -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Command Number"
+                               FontWeight="Medium"
+                               Foreground="#CBD5E1"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="CommandNumBox"
+                             Height="36"
+                             FontSize="16"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             BorderBrush="#334155"/>
+                </StackPanel>
+
+                <!-- Client ID -->
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="Client ID"
+                               FontWeight="Medium"
+                               Foreground="#CBD5E1"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="ClientIdBox"
+                             Height="36"
+                             FontSize="16"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             BorderBrush="#334155"
+                             Text="1"/>
+                </StackPanel>
+
+                <!-- Command Payload -->
+                <StackPanel Margin="0,0,0,24">
+                    <TextBlock Text="Command Payload (hex or text)"
+                               FontWeight="Medium"
+                               Foreground="#CBD5E1"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="CommandPayloadBox"
+                             Height="120"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
+                             Background="#020617"
+                             Foreground="#E5E7EB"
+                             BorderBrush="#334155"/>
+                </StackPanel>
+
+                <!-- Action -->
+                <Button Content="Send Command"
+                        Height="42"
+                        Width="200"
+                        HorizontalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Background="#6366F1"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="OnSendCommandClicked"/>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

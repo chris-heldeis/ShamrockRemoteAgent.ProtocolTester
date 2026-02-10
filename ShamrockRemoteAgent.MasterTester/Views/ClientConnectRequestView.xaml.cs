@@ -22,7 +22,7 @@ public partial class ClientConnectRequestView : UserControl
         SelfPacketizeBox.SelectedIndex = 0;
     }
 
-    private void OnBuildPacketClicked(object sender, RoutedEventArgs e)
+    private async void OnBuildPacketClicked(object sender, RoutedEventArgs e)
     {
         ushort deviceId = ushort.Parse(DeviceIdBox.Text);
         uint txBuf = uint.Parse(TxBufBox.Text);
@@ -48,6 +48,13 @@ public partial class ClientConnectRequestView : UserControl
 
         byte[] packetBytes = packet.Serialize();
 
+        // Wrap with Broker protocol
+        byte[] brokerPacket =
+            BrokerProtocol.Encode(PacketType.COM_DATA, packetBytes);
+
+        await App.BrokerSocket.SendAsync(brokerPacket);
+
         PacketBus.Publish(packetBytes);
+        PacketBus.PublishLog($"Sent ClientConnectRequest successfully!");
     }
 }

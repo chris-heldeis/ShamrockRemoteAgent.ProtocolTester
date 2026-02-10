@@ -60,16 +60,8 @@
                     <ComboBox x:Name="ProtocolBox"
                               FontSize="18"
                               Height="36"
-                              Foreground="#000055"
-                              BorderBrush="#334155"
-                              Background="#020617"
                               Padding="4"
                               HorizontalContentAlignment="Left">
-                        <ComboBox.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#020617"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2563EB"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#020617"/>
-                        </ComboBox.Resources>
                     </ComboBox>
                 </StackPanel>
 
@@ -111,15 +103,7 @@
                                Margin="0,0,0,6"/>
                     <ComboBox x:Name="SelfPacketizeBox"
                               FontSize="18"
-                              Height="36"
-                              Background="#020617"
-                              Foreground="#000055"
-                              BorderBrush="#334155">
-                        <ComboBox.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#020617"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2563EB"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#020617"/>
-                        </ComboBox.Resources>
+                              Height="36">
                     </ComboBox>
                 </StackPanel>
 

@@ -1,7 +1,8 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
-using System.IO;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
+using System;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,41 +20,33 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             try
             {
-                if (!App.BrokerSocket.IsConnected)
+                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId))
                 {
-                    await App.BrokerSocket.ConnectAsync(
-                        App.BrokerHost,
-                        App.BrokerPort,
-                        App.MasterId);
+                    MessageBox.Show("Invalid Client ID");
+                    return;
                 }
 
-                // --- Parse inputs ---
-                ushort clientId = ushort.Parse(ClientIdBox.Text.Trim());
-                byte statusOnTx = 0;
-                byte blockOnSend = 0;
-
-                byte[] messageBytes = Encoding.UTF8.GetBytes(
-                    ClientMsgBox.Text ?? string.Empty);
-
-                ushort msgSize;
-                if (!ushort.TryParse(MsgSizeBox.Text, out msgSize) || msgSize == 0)
+                if (!ushort.TryParse(MsgSizeBox.Text, out ushort msgSize))
                 {
-                    msgSize = (ushort)messageBytes.Length;
-                    MsgSizeBox.Text = msgSize.ToString();
+                    MessageBox.Show("Invalid Message Size");
+                    return;
                 }
 
-                // --- Build payload manually (protocol order) ---
-                using var ms = new MemoryStream();
+                byte[] clientMsg = ParseMessage(ClientMsgBox.Text);
 
-                ms.Write(BitConverter.GetBytes(clientId).Reverse().ToArray()); // 2 bytes
-                ms.Write(BitConverter.GetBytes(msgSize).Reverse().ToArray());  // 2 bytes
-                ms.Write(messageBytes);                                        // variable
-                ms.WriteByte(statusOnTx);                                      // 1 byte
-                ms.WriteByte(blockOnSend);                                     // 1 byte
+                // Build payload
+                var payload = new SendMessageReq
+                {
+                    ClientID = { FieldData = clientId },
+                    MsgSize = { FieldData = msgSize },
+                    ClientMsg = { FieldData = clientMsg },
+                    StatusOnTx = { FieldData = 0x00 },
+                    BlockOnSend = { FieldData = 0x00 }
+                };
 
-                byte[] payloadBytes = ms.ToArray();
+                byte[] payloadBytes = payload.Serialize();
 
-                // --- Build data packet ---
+                // Build DataPacket
                 var packet = new DataPacket
                 {
                     PacketType = DataPacketTypeEnum.TX_FRAME_REQ,
@@ -63,18 +56,39 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 byte[] packetBytes = packet.Serialize();
 
-                // --- HexViewer ---
-                PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog(
-                    $"TX_FRAME_REQ → Client {clientId}, {msgSize} bytes");
+                // Wrap with Broker protocol
+                byte[] brokerPacket =
+                    BrokerProtocol.Encode(PacketType.COM_DATA, packetBytes);
 
-                // --- Send ---
-                await App.BrokerSocket.SendAsync(packetBytes);
+                await App.BrokerSocket.SendAsync(brokerPacket);
+
+                // Publish to HexViewer
+                PacketBus.Publish(packetBytes);
+                PacketBus.PublishLog($"Sent SendMessageRequest successfully!");
             }
             catch (Exception ex)
             {
-                PacketBus.PublishLog($"ERROR: {ex.Message}");
+                MessageBox.Show($"Error: {ex.Message}");
             }
+        }
+
+        private byte[] ParseMessage(string input)
+        {
+            input = input.Trim();
+
+            // Hex input (space separated)
+            if (input.Contains(" "))
+            {
+                string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                byte[] bytes = new byte[parts.Length];
+
+                for (int i = 0; i < parts.Length; i++)
+                    bytes[i] = Convert.ToByte(parts[i], 16);
+
+                return bytes;
+            }
+
+            return Encoding.ASCII.GetBytes(input);
         }
     }
 }

@@ -1,24 +1,21 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
-using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetLastErrorMsg;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace ShamrockRemoteAgent.MasterTester.Views
 {
-    public partial class ReadMessageRequestView : UserControl
+    public partial class GetLastErrorMsgRequestView : UserControl
     {
-        public ReadMessageRequestView()
+        public GetLastErrorMsgRequestView()
         {
             InitializeComponent();
-
-            // Default selection for BlockOnRead
-            BlockOnReadBox.SelectedIndex = 0;
         }
 
-        private async void OnReadMessageClicked(object sender, RoutedEventArgs e)
+        private async void OnGetLastErrorMsgClicked(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -28,20 +25,17 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                     return;
                 }
 
-                if (!ushort.TryParse(BufferSizeBox.Text, out ushort bufferSize))
+                if (!ushort.TryParse(ErrorCodeBox.Text, out ushort errorCode))
                 {
-                    MessageBox.Show("Invalid Buffer Size");
+                    MessageBox.Show("Invalid Error Code");
                     return;
                 }
 
-                byte blockValue = (byte)(BlockOnReadBox.SelectedIndex == 0 ? 0x01 : 0x00); // 0x01 = BLOCKING, 0x00 = NON_BLOCKING
-
                 // Build payload
-                var payload = new ReadMessageReq
+                var payload = new GetLastErrorMsgReq
                 {
                     ClientID = { FieldData = clientId },
-                    BufferSize = { FieldData = bufferSize },
-                    BlockOnRead = { FieldData = blockValue },
+                    ErrCode = { FieldData = errorCode }
                 };
 
                 byte[] payloadBytes = payload.Serialize();
@@ -49,7 +43,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 // Build DataPacket
                 var packet = new DataPacket
                 {
-                    PacketType = DataPacketTypeEnum.RX_FRAME_REQ,
+                    PacketType = DataPacketTypeEnum.GET_LAST_ERR_MSG_REQ,
                     PacketPayload = payloadBytes,
                     PacketLength = (uint)(4 + 1 + payloadBytes.Length)
                 };
@@ -64,7 +58,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent ReadMessageRequest successfully!");
+                PacketBus.PublishLog($"Sent GetLastErrorMsgRequest successfully!");
             }
             catch (Exception ex)
             {

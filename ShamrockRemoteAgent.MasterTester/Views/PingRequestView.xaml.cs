@@ -32,14 +32,15 @@ public partial class PingRequestView : UserControl
 
             byte[] packetBytes = packet.Serialize();
 
-            // Publish to HexViewer
-            PacketBus.Publish(packetBytes);
-
             // Wrap with Broker protocol
             byte[] brokerPacket =
                 BrokerProtocol.Encode(PacketType.COM_DATA, packetBytes);
 
             await App.BrokerSocket.SendAsync(brokerPacket);
+
+            // Publish to HexViewer
+            PacketBus.Publish(packetBytes);
+            PacketBus.PublishLog($"Sent PingRequest successfully!");
         }
         catch (Exception ex)
         {
