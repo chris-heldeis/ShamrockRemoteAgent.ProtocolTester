@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ShamrockRemoteAgent.TCPProtocol\ShamrockRemoteAgent.TCPProtocol.csproj" />
+    <ProjectReference Include="..\ShamrockRemoteAgent.TCPProtocol\ShamrockRemoteAgent.TCPProtocol.csproj" />
   </ItemGroup>
 
 </Project>

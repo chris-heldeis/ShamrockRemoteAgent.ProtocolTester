@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36915.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShamrockRemoteAgent.MasterTester", "ShamrockRemoteAgent.MasterTester\ShamrockRemoteAgent.MasterTester.csproj", "{DDF819DA-22E4-4723-A548-6BA968DA09C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShamrockRemoteAgent.MasterTester", "ShamrockRemoteAgent.MasterTester.csproj", "{DDF819DA-22E4-4723-A548-6BA968DA09C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShamrockRemoteAgent.Client", "..\ShamrockRemoteAgent.Client\ShamrockRemoteAgent.Client.csproj", "{41553A65-5A1F-1AAD-44BF-6632400D825D}"
 EndProject
