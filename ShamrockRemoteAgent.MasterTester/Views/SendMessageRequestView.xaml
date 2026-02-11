@@ -49,21 +49,6 @@
                              Foreground="#E5E7EB"
                              BorderBrush="#334155"/>
                 </StackPanel>
-
-                <!-- Message Size -->
-                <StackPanel Margin="0,0,0,16">
-                    <TextBlock Text="Message Size (bytes)"
-                               FontWeight="Medium"
-                               Foreground="#CBD5E1"
-                               Margin="0,0,0,6"/>
-                    <TextBox x:Name="MsgSizeBox"
-                             Height="36"
-                             Text="0"
-                             Background="#020617"
-                             Foreground="#E5E7EB"
-                             BorderBrush="#334155"/>
-                </StackPanel>
-
                 <!-- Client Message -->
                 <StackPanel Margin="0,0,0,16">
                     <TextBlock Text="Client Message (hex or text)"
@@ -90,6 +75,7 @@
                              Height="36"
                              Text="0"
                              IsReadOnly="True"
+                             Cursor="Hand"
                              Background="#020617"
                              Foreground="#94A3B8"
                              BorderBrush="#334155"/>
@@ -105,13 +91,14 @@
                              Height="36"
                              Text="0"
                              IsReadOnly="True"
+                             Cursor="Hand"
                              Background="#020617"
                              Foreground="#94A3B8"
                              BorderBrush="#334155"/>
                 </StackPanel>
 
                 <!-- Action -->
-                <Button Content="Send Message"
+                <Button Content="Submit"
                         Height="40"
                         Width="180"
                         HorizontalAlignment="Center"
@@ -120,8 +107,26 @@
                         Foreground="White"
                         BorderThickness="0"
                         Cursor="Hand"
-                        Click="OnSendMessageClicked"/>
+                        Click="OnSendMessageClicked">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                            </Border>
 
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1D4ED8"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#1E40AF"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
         </Border>
     </Grid>

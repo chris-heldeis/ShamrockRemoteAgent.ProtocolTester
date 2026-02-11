@@ -26,13 +26,9 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                     return;
                 }
 
-                if (!ushort.TryParse(MsgSizeBox.Text, out ushort msgSize))
-                {
-                    MessageBox.Show("Invalid Message Size");
-                    return;
-                }
-
                 byte[] clientMsg = ParseMessage(ClientMsgBox.Text);
+
+                ushort msgSize = (ushort)clientMsg.Length;
 
                 // Build payload
                 var payload = new SendMessageReq

@@ -23,7 +23,7 @@
             <StackPanel>
 
                 <!-- Header -->
-                <TextBlock Text="Get Last Error Message"
+                <TextBlock Text="Get Last Error Message Request"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="#E5E7EB"
@@ -62,7 +62,7 @@
                 </StackPanel>
 
                 <!-- Action -->
-                <Button Content="Get Last Error Message"
+                <Button Content="Submit"
                         Width="260"
                         Height="42"
                         FontWeight="SemiBold"

@@ -139,20 +139,12 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo + Title -->
+                <!-- Title -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <StackPanel Margin="12,0,0,0">
                         <TextBlock Text="RP1210 TCP Protocol Master Tester" Style="{StaticResource TitleText}"/>
-                        <TextBlock Text="v1.0.0" FontSize="11" Foreground="Gray"/>
                     </StackPanel>
                 </StackPanel>
-
-                <!-- Date -->
-                <TextBlock Grid.Column="1"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Text="{Binding Today, StringFormat='{}{0:MMMM dd, yyyy}'}"
-                           Foreground="Gray"/>
             </Grid>
         </Border>
 
@@ -206,7 +198,7 @@
                                 <TextBlock Text="Send Message"/>
                             </StackPanel>
                         </ListViewItem>
-                        
+
                         <ListViewItem Tag="Read Message">
                             <StackPanel Orientation="Horizontal" Margin="12">
                                 <TextBlock Text="✉️" FontSize="14" Margin="0 0 5 0"/>
@@ -221,7 +213,7 @@
                         </ListViewItem>
                         <ListViewItem Tag="ReadVersion">
                             <StackPanel Orientation="Horizontal" Margin="12">
-                                <TextBlock Text="📦" FontSize="14" Margin="0 0 6 0"/>
+                                <TextBlock Text="🏷️" FontSize="14" Margin="0 0 6 0"/>
                                 <TextBlock Text="Read Version"/>
                             </StackPanel>
                         </ListViewItem>
@@ -243,8 +235,19 @@
                                 <TextBlock Text="Get Last Error Msg"/>
                             </StackPanel>
                         </ListViewItem>
+                        <ListViewItem Tag="Read Detailed Version">
+                            <StackPanel Orientation="Horizontal" Margin="12">
+                                <TextBlock Text="🏷️" FontSize="14" Margin="0 0 5 0"/>
+                                <TextBlock Text="Read Detailed Version"/>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem Tag="Close">
+                            <StackPanel Orientation="Horizontal" Margin="12">
+                                <TextBlock Text="🔒" FontSize="14" Margin="0 0 5 0"/>
+                                <TextBlock Text="Close"/>
+                            </StackPanel>
+                        </ListViewItem>
                     </ListView>
-
                 </StackPanel>
             </Border>
 

@@ -42,7 +42,8 @@
                         Background="#2563EB"
                         Foreground="White"
                         BorderThickness="0"
-                        Cursor="Hand">
+                        Cursor="Hand"
+                        Click="OnSendPingClicked">
 
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -63,7 +64,6 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-
             </StackPanel>
         </Border>
     </Grid>

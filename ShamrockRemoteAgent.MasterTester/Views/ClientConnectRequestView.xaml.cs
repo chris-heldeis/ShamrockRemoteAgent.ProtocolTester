@@ -22,7 +22,7 @@ public partial class ClientConnectRequestView : UserControl
         SelfPacketizeBox.SelectedIndex = 0;
     }
 
-    private async void OnBuildPacketClicked(object sender, RoutedEventArgs e)
+    private async void OnClientConnectRequestClicked(object sender, RoutedEventArgs e)
     {
         ushort deviceId = ushort.Parse(DeviceIdBox.Text);
         uint txBuf = uint.Parse(TxBufBox.Text);

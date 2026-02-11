@@ -56,6 +56,12 @@ namespace ShamrockRemoteAgent.MasterTester
                 case "Get Last Error Msg":
                     MainContent.Content = new GetLastErrorMsgRequestView();
                     break;
+                case "Read Detailed Version":
+                    MainContent.Content = new ReadDetailedVersionRequestView();
+                    break;
+                case "Close":
+                    MainContent.Content = new CloseRequestView();
+                    break;
             }
         }
         protected override async void OnClosed(EventArgs e)

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.GetErrorMsgRequestView"
+﻿<UserControl x:Class="ShamrockRemoteAgent.MasterTester.Views.CloseRequestView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
@@ -23,42 +23,27 @@
             <StackPanel>
 
                 <!-- Header -->
-                <TextBlock Text="Get Error Message"
+                <TextBlock Text="Close Request"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="#E5E7EB"
                            Margin="0,0,0,6"/>
 
-                <TextBlock Text="Retrieve a descriptive message for a specific error code"
+                <TextBlock Text="Close the active master session"
                            Foreground="#94A3B8"
                            Margin="0,0,0,28"/>
 
-                <!-- Error Code -->
-                <StackPanel Margin="0,0,0,24">
-                    <TextBlock Text="Error Code"
-                               FontWeight="Medium"
-                               Foreground="White"
-                               Margin="0,0,0,6"/>
-
-                    <TextBox x:Name="ErrorCodeBox"
-                             Height="36"
-                             FontSize="18"
-                             Background="#020617"
-                             Foreground="#E5E7EB"
-                             Text="0"/>
-                </StackPanel>
-
-                <!-- Action -->
+                <!-- Action Button -->
                 <Button Content="Submit"
-                        Width="200"
+                        Width="220"
                         Height="42"
                         FontWeight="SemiBold"
-                        HorizontalAlignment="Center"
-                        Background="#2563EB"
+                        HorizontalAlignment="Left"
+                        Background="#EF4444"
                         Foreground="White"
                         BorderThickness="0"
                         Cursor="Hand"
-                        Click="OnGetErrorMsgClicked">
+                        Click="OnCloseClicked">
 
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -70,15 +55,16 @@
 
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#1D4ED8"/>
+                                    <Setter Property="Background" Value="#DC2626"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="#1E40AF"/>
+                                    <Setter Property="Background" Value="#991B1B"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+
             </StackPanel>
         </Border>
     </Grid>

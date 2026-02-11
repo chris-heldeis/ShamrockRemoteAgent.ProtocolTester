@@ -6,58 +6,35 @@
         Width="1200"
         Height="840"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource AppBackgroundBrush}">
+        Background="#0F172A">
 
     <!-- ========================= -->
-    <!--  Resources (Theme-ready)  -->
+    <!--        Resources          -->
     <!-- ========================= -->
     <Window.Resources>
 
         <!-- Colors -->
-        <Color x:Key="LightBg">#F9FAFB</Color>
-        <Color x:Key="DarkBg">#0F172A</Color>
+        <Color x:Key="AppBg">#0F172A</Color>
+        <Color x:Key="CardBg">#020617</Color>
+        <Color x:Key="BorderColor">#1E293B</Color>
         <Color x:Key="Primary">#3B82F6</Color>
-        <Color x:Key="SidebarBg">#111827</Color>
-        <Color x:Key="TextLight">#E5E7EB</Color>
-        <Color x:Key="TextDark">#111827</Color>
+        <Color x:Key="TextMain">#E5E7EB</Color>
+        <Color x:Key="TextSub">#94A3B8</Color>
 
         <!-- Brushes -->
-        <SolidColorBrush x:Key="AppBackgroundBrush" Color="{DynamicResource LightBg}" />
-        <SolidColorBrush x:Key="HeaderBrush" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="SidebarBrush" Color="{DynamicResource SidebarBg}" />
-        <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource Primary}" />
-        <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource TextDark}" />
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="{StaticResource AppBg}" />
+        <SolidColorBrush x:Key="HeaderBrush" Color="#020617" />
+        <SolidColorBrush x:Key="CardBrush" Color="{StaticResource CardBg}" />
+        <SolidColorBrush x:Key="BorderBrushDark" Color="{StaticResource BorderColor}" />
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+        <SolidColorBrush x:Key="TextMainBrush" Color="{StaticResource TextMain}" />
+        <SolidColorBrush x:Key="TextSubBrush" Color="{StaticResource TextSub}" />
 
-        <!-- Text styles -->
+        <!-- Title Style -->
         <Style x:Key="TitleText" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-        </Style>
-
-        <Style x:Key="SidebarItemStyle" TargetType="ListViewItem">
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="Margin" Value="4"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <Border CornerRadius="6"
-                                Background="{TemplateBinding Background}">
-                            <ContentPresenter/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#1F2937"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#374151"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Foreground" Value="{StaticResource TextMainBrush}"/>
         </Style>
 
     </Window.Resources>
@@ -75,57 +52,16 @@
         <Border Grid.Row="0"
                 Background="{DynamicResource HeaderBrush}"
                 Padding="20"
-                BorderBrush="#E5E7EB"
+                BorderBrush="#1E293B"
                 BorderThickness="0,0,0,1">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Logo + Title -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Ellipse Width="36" Height="36" Fill="{DynamicResource PrimaryBrush}"/>
-                    <StackPanel Margin="12,0,0,0">
-                        <TextBlock Text="RP1210 TCP Protocol Client Tester" Style="{StaticResource TitleText}"/>
-                        <TextBlock Text="v1.0.0" FontSize="11" Foreground="Gray"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <!-- Date -->
-                <TextBlock Grid.Column="1"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Text="{Binding Today, StringFormat='{}{0:MMMM dd, yyyy}'}"
-                           Foreground="Gray"/>
-            </Grid>
+            <TextBlock Text="RP1210 TCP Protocol Client Tester"
+                       Style="{StaticResource TitleText}"/>
         </Border>
 
         <!-- ===== Body ===== -->
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="680"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Main Content -->
-            <Border 
-                    Background="{DynamicResource AppBackgroundBrush}"
-                    Padding="24">
-
-                <!-- Swap views here -->
-                <ContentControl x:Name="MainContent">
-                    <views:LoginRequestView/>
-                </ContentControl>
-
-            </Border>
-            <Border Grid.Column="1">
-                <!-- Hex Viewer -->
-                <views:HexViewerView Grid.Row="1"
-                         Margin="16,8,16,16"/>
-            </Border>
+            <ContentControl x:Name="MainContent"/>
         </Grid>
     </Grid>
 </Window>

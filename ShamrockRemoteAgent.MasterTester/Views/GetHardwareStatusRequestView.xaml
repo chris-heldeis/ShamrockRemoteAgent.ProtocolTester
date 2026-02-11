@@ -23,7 +23,7 @@
             <StackPanel>
 
                 <!-- Header -->
-                <TextBlock Text="Get Hardware Status"
+                <TextBlock Text="Get Hardware Status Request"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="#E5E7EB"
@@ -57,6 +57,7 @@
                              Height="36"
                              FontSize="18"
                              Text="16"
+                             Cursor="Hand"
                              Background="#020617"
                              Foreground="#E5E7EB"
                              IsReadOnly="True"/>
@@ -72,13 +73,14 @@
                              Height="36"
                              FontSize="18"
                              Text="0"
+                             Cursor="Hand"
                              Background="#020617"
                              Foreground="#E5E7EB"
                              IsReadOnly="True"/>
                 </StackPanel>
 
                 <!-- Action Button -->
-                <Button Content="Get Hardware Status"
+                <Button Content="Submit"
                         Width="220"
                         Height="42"
                         FontWeight="SemiBold"
