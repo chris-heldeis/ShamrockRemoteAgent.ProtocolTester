@@ -124,7 +124,7 @@
 
                     <!-- Customer ID -->
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="Customer ID (32 bytes max)"
+                        <TextBlock Text="Customer ID"
                                    FontWeight="Medium"
                                    Foreground="#CBD5E1"
                                    Margin="0,0,0,6"/>
@@ -139,7 +139,7 @@
 
                     <!-- Email -->
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="Email (256 bytes max)"
+                        <TextBlock Text="Email"
                                    FontWeight="Medium"
                                    Foreground="#CBD5E1"
                                    Margin="0,0,0,6"/>

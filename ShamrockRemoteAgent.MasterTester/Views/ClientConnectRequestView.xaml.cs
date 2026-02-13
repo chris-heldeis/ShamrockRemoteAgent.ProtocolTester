@@ -50,7 +50,7 @@ public partial class ClientConnectRequestView : UserControl
 
         // Wrap with Broker protocol
         byte[] brokerPacket =
-            BrokerProtocol.Encode(PacketType.COM_DATA, packetBytes);
+            BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, packetBytes);
 
         await App.BrokerSocket.SendAsync(brokerPacket);
 

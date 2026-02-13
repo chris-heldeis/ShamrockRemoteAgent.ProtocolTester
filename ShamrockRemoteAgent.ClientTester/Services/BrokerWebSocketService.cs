@@ -95,7 +95,7 @@ namespace ShamrockRemoteAgent.ClientTester.Services
 
                                 // Wrap with Broker protocol
                                 byte[] brokerSedingPacket =
-                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, responseBytes);
+                                    BrokerProtocol.Encode(BrokerPacketType.COM_DATA, responseBytes);
 
                                 await SendAsync(brokerSedingPacket);
                             }

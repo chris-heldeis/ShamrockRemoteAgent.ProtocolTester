@@ -53,7 +53,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Wrap with Broker protocol
                 byte[] brokerPacket =
-                    BrokerProtocol.Encode(PacketType.COM_DATA, packetBytes);
+                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, packetBytes);
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);

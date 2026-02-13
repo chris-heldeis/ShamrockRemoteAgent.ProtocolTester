@@ -7,7 +7,7 @@ namespace ShamrockRemoteAgent.MasterTester.Services
     {
         private static uint _seq = 0;
 
-        public static byte[] Encode(PacketType type, byte[] payload)
+        public static byte[] Encode(BrokerPacketTypeEnum type, byte[] payload)
         {
             uint seq = ++_seq;
 
@@ -49,7 +49,7 @@ namespace ShamrockRemoteAgent.MasterTester.Services
         }
     }
 
-    public enum PacketType : byte
+    public enum BrokerPacketTypeEnum : byte
     {
         COM_DATA = 0x01,
         NEED_WAIT = 0x02,

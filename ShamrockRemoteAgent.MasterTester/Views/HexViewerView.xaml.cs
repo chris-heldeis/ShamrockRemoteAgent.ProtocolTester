@@ -1,6 +1,7 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Helpers;
 using ShamrockRemoteAgent.MasterTester.Models;
 using ShamrockRemoteAgent.MasterTester.Services;
+using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using System;
 using System.Windows.Controls;
 
@@ -32,7 +33,7 @@ public partial class HexViewerView : UserControl
         {
             DetailsBox.Text =
 $"""
-Packet Type: {packet.PacketType}
+Packet Type: {(BrokerPacketTypeEnum)packet.PacketType}
 Packet Length: {packet.PacketLength}
 {packet.PayloadDetails}
 """;
@@ -46,7 +47,7 @@ Packet Length: {packet.PacketLength}
             DetailsBox.Text =
 $"""
 Packet Length: {packet.TotalLength}
-Packet Type: {packet.PacketType}
+Packet Type: {(BrokerPacketTypeEnum)packet.PacketType}
 Packet Seq: {packet.Sequence}
 Packet Payload: {packet.Payload}
 """;

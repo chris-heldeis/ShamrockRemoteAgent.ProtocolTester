@@ -5,6 +5,8 @@ using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ShamrockRemoteAgent.ClientTester.ViewModels
 {
@@ -19,6 +21,9 @@ namespace ShamrockRemoteAgent.ClientTester.ViewModels
         public ServiceTypeEnum ServiceType { get; set; }
 
         public string OtherService { get; set; } = "";
+        public Array ProtocolValues => Enum.GetValues(typeof(DeviceProtocolEnum));
+        public Array AdapterValues => Enum.GetValues(typeof(DeviceAdapterEnum));
+        public Array ServiceTypeValues => Enum.GetValues(typeof(ServiceTypeEnum));
 
         private string _hexOutput = "";
         public string HexOutput
@@ -27,11 +32,80 @@ namespace ShamrockRemoteAgent.ClientTester.ViewModels
             set { _hexOutput = value; OnPropertyChanged(); }
         }
 
-        public Array ProtocolValues => Enum.GetValues(typeof(DeviceProtocolEnum));
-        public Array AdapterValues => Enum.GetValues(typeof(DeviceAdapterEnum));
-        public Array ServiceTypeValues => Enum.GetValues(typeof(ServiceTypeEnum));
+        private bool IsValidEmail(string email)
+        {
+            return Regex.IsMatch(email,
+                @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                RegexOptions.IgnoreCase);
+        }
 
-        public async void BuildPacket()
+        public bool Validate(out string error)
+        {
+            error = string.Empty;
+
+            // CustomerID validation (max 32 BYTES, not chars)
+            if (string.IsNullOrWhiteSpace(CustomerID))
+            {
+                error = "Customer ID is required.";
+                return false;
+            }
+
+            if (Encoding.UTF8.GetByteCount(CustomerID) > 32)
+            {
+                error = "Customer ID must not exceed 32 bytes.";
+                return false;
+            }
+
+            // Email validation
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                error = "Email is required.";
+                return false;
+            }
+
+            if (Encoding.UTF8.GetByteCount(Email) > 256)
+            {
+                error = "Email must not exceed 256 bytes.";
+                return false;
+            }
+
+            if (!IsValidEmail(Email))
+            {
+                error = "Invalid email format.";
+                return false;
+            }
+
+            // DeviceID validation
+            if (DeviceID == 0)
+            {
+                error = "Device ID must be a valid positive number.";
+                return false;
+            }
+
+            // Protocol validation
+            if ((int)Protocol == 0)
+            {
+                error = "Protocol must be selected.";
+                return false;
+            }
+
+            // Adapter validation
+            if ((int)Adapter == 0)
+            {
+                error = "Adapter must be selected.";
+                return false;
+            }
+
+            // ServiceType validation
+            if ((int)ServiceType == 0)
+            {
+                error = "Service Type must be selected.";
+                return false;
+            }
+
+            return true;
+        }
+        public async void SendLoginRequest()
         {
             try
             {
@@ -64,11 +138,15 @@ namespace ShamrockRemoteAgent.ClientTester.ViewModels
                 };
 
                 byte[] packetBytes = packet.Serialize();
+                // Wrap with Broker protocol
+                byte[] brokerPacket =
+                    BrokerProtocol.Encode(BrokerPacketType.COM_DATA, packetBytes);
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
+                PacketBus.PublishLog($"Sent LoginRequest successfully!");
 
-                await App.BrokerSocket.SendAsync(packetBytes);
+                await App.BrokerSocket.SendAsync(brokerPacket);
             }
             catch (Exception ex)
             {

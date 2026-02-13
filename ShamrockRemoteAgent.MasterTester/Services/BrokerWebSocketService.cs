@@ -58,17 +58,34 @@ public class BrokerWebSocketService
                 try
                 {
                     var brokerRecivingPacket = BrokerProtocol.Decode(receivedBytes);
-                    var decoded = PacketDecoder.Decode(brokerRecivingPacket.Payload);
-                    PacketBus.Publish(brokerRecivingPacket.Payload);
+                    if (brokerRecivingPacket.Payload.Length > 0) { 
+                        var decoded = PacketDecoder.Decode(brokerRecivingPacket.Payload);
+                        PacketBus.Publish(brokerRecivingPacket.Payload);
 
-                    PacketBus.PublishLog(
-                        $"Received {brokerRecivingPacket.Payload.Length} bytes");
-                    PacketBus.PublishDecoded(decoded);
+                        PacketBus.PublishLog(
+                            $"Received {brokerRecivingPacket.Payload.Length} bytes");
+                        PacketBus.PublishDecoded(decoded);
 
-                    // Sent Response
-                    if (decoded.PacketType == DataPacketTypeEnum.PING_RES)
+                        // Sent Response
+                        switch (decoded.PacketType)
+                        {
+                            case DataPacketTypeEnum.PING_RES:
+                                PacketBus.PublishLog("PING_RES received from Client");
+                                break;
+                            case DataPacketTypeEnum.LOGIN_REQ:
+                                PacketBus.PublishLog("LOGIN_REQ received from Client");
+                                break;
+                            default:
+                                break;
+                        }
+                    } 
+                    else
                     {
-                        PacketBus.PublishLog("PING_RES received from Client");
+                        PacketBus.Publish(receivedBytes);
+                        PacketBus.PublishBrokerDecoded(brokerRecivingPacket);
+
+                        PacketBus.PublishLog(
+                            $"Received {receivedBytes.Length} bytes");
                     }
                 }
                 catch (Exception ex)

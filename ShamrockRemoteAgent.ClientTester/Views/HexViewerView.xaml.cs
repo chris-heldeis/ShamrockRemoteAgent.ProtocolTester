@@ -50,7 +50,7 @@ Packet Length: {packet.PacketLength}
                 DetailsBox.Text =
 $"""
 Packet Length: {packet.TotalLength}
-Packet Type: {((BrokerPacketTypeEnum)packet.PacketType).ToString()}
+Packet Type: {((BrokerPacketType)packet.PacketType).ToString()}
 Packet Seq: {packet.Sequence}
 Packet Payload: {packet.Payload}
 """;

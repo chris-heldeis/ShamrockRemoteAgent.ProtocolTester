@@ -7,7 +7,7 @@ public static class BrokerProtocol
 {
     private static uint _seq = 0;
 
-    public static byte[] Encode(BrokerPacketTypeEnum type, byte[] payload)
+    public static byte[] Encode(BrokerPacketType type, byte[] payload)
     {
         uint seq = ++_seq;
 
@@ -47,6 +47,15 @@ public static class BrokerProtocol
             Payload = payload
         };
     }
+}
+
+public enum BrokerPacketType : byte
+{
+    COM_DATA = 0x01,
+    NEED_WAIT = 0x02,
+    READY_CLOSE = 0x03,
+    CON_TIMEOUT = 0x04,
+    DATA_INVALID = 0x05
 }
 
 public class BrokerDecodedPacket
