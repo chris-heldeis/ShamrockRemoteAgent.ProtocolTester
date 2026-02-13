@@ -19,7 +19,7 @@ public partial class PingRequestView : UserControl
         try
         {
             // Build empty payload
-            var payload = new PingReq();
+            PingReq payload = new PingReq();
             byte[] payloadBytes = payload.Serialize(); // should be empty array
 
             // Build data packet

@@ -1,7 +1,7 @@
 ﻿using ShamrockRemoteAgent.ClientTester.Helpers;
-using ShamrockRemoteAgent.ClientTester.Models;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 using System.Net.WebSockets;
 using System.Text;
@@ -12,6 +12,7 @@ namespace ShamrockRemoteAgent.ClientTester.Services
     {
         private ClientWebSocket? _socket;
         private CancellationTokenSource? _cts;
+        public event Action? LoginHandshakeCompleted;
 
         public bool IsConnected =>
             _socket != null && _socket.State == WebSocketState.Open;
@@ -72,32 +73,61 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                 $"Received {brokerRecivingPacket.Payload.Length} bytes");
 
                             // Sent Response
-                            if (decoded.PacketType == DataPacketTypeEnum.PING_REQ)
+                            switch (decoded.PacketType)
                             {
-                                PacketBus.PublishLog("PING_REQ received from Master");
+                                case DataPacketTypeEnum.PING_REQ:
+                                    PacketBus.PublishLog("PING_REQ received from Master");
 
-                                // Build empty PING_RES payload
-                                var payload = new PingRes();
-                                byte[] payloadBytes = payload.Serialize(); // empty
+                                    // Build empty PING_RES payload
+                                    PingRes pingResPayload = new PingRes();
+                                    byte[] payloadBytes = pingResPayload.Serialize(); // empty
 
-                                var responsePacket = new DataPacket
-                                {
-                                    PacketType = DataPacketTypeEnum.PING_RES,
-                                    PacketPayload = payloadBytes,
-                                    PacketLength = (uint)(4 + 1 + payloadBytes.Length)
-                                };
+                                    var responsePacket = new DataPacket
+                                    {
+                                        PacketType = DataPacketTypeEnum.PING_RES,
+                                        PacketPayload = payloadBytes,
+                                        PacketLength = (uint)(4 + 1 + payloadBytes.Length)
+                                    };
 
-                                byte[] responseBytes = responsePacket.Serialize();
+                                    byte[] responseBytes = responsePacket.Serialize();
 
-                                // Show outgoing response
-                                PacketBus.Publish(responseBytes);
-                                PacketBus.PublishLog("Sending PING_RES to Master");
+                                    // Show outgoing response
+                                    PacketBus.Publish(responseBytes);
+                                    PacketBus.PublishLog("Sending PING_RES to Master");
 
-                                // Wrap with Broker protocol
-                                byte[] brokerSedingPacket =
-                                    BrokerProtocol.Encode(BrokerPacketType.COM_DATA, responseBytes);
+                                    // Wrap with Broker protocol
+                                    byte[] brokerSedingPacket =
+                                        BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, responseBytes);
 
-                                await SendAsync(brokerSedingPacket);
+                                    await SendAsync(brokerSedingPacket);
+
+                                    break;
+                                case DataPacketTypeEnum.LOGIN_RES:
+                                    PacketBus.PublishLog("LOGIN_RES received from Master");
+
+                                    // Build empty LOGIN_ACK payload
+                                    LoginAck loginAckPayload = new LoginAck();
+                                    byte[] loginAckayloadBytes = loginAckPayload.Serialize();
+
+                                    // Build data packet
+                                    var packet = new DataPacket
+                                    {
+                                        PacketType = DataPacketTypeEnum.LOGIN_ACK,
+                                        PacketPayload = loginAckayloadBytes,
+                                        PacketLength = (uint)(4 + 1 + loginAckayloadBytes.Length)
+                                    };
+
+                                    byte[] packetBytes = packet.Serialize();
+                                    // Wrap with Broker protocol
+                                    byte[] brokerPacket =
+                                        BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, packetBytes);
+                                    await App.BrokerSocket.SendAsync(brokerPacket);
+                                    // Publish to HexViewer
+                                    PacketBus.Publish(packetBytes);
+                                    PacketBus.PublishLog($"Sent LoginAck successfully!");
+                                    LoginHandshakeCompleted?.Invoke();
+
+                                    break;
                             }
                         } else
                         {

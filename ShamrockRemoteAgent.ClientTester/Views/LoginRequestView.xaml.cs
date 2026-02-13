@@ -9,7 +9,6 @@ namespace ShamrockRemoteAgent.ClientTester.Views
     /// </summary>
     public partial class LoginRequestView : UserControl
     {
-        public event Action? LoginCompleted;
         public LoginRequestView()
         {
             InitializeComponent();
@@ -28,7 +27,6 @@ namespace ShamrockRemoteAgent.ClientTester.Views
                 }
 
                 vm.SendLoginRequest();
-                LoginCompleted?.Invoke();
             }
         }
     }

@@ -140,13 +140,12 @@ namespace ShamrockRemoteAgent.ClientTester.ViewModels
                 byte[] packetBytes = packet.Serialize();
                 // Wrap with Broker protocol
                 byte[] brokerPacket =
-                    BrokerProtocol.Encode(BrokerPacketType.COM_DATA, packetBytes);
-
-                // Publish to HexViewer
-                PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent LoginRequest successfully!");
+                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, packetBytes);
 
                 await App.BrokerSocket.SendAsync(brokerPacket);
+                // Publish to HexViewer
+                PacketBus.Publish(packetBytes);
+                PacketBus.PublishLog($"Sent LoginReq successfully!");
             }
             catch (Exception ex)
             {

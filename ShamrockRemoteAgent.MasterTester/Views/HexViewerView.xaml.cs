@@ -31,9 +31,10 @@ public partial class HexViewerView : UserControl
     {
         Dispatcher.Invoke(() =>
         {
-            DetailsBox.Text =
+            DetailsBox.Text +=
 $"""
-Packet Type: {(BrokerPacketTypeEnum)packet.PacketType}
+
+Packet Type: {(DataPacketTypeEnum)packet.PacketType}
 Packet Length: {packet.PacketLength}
 {packet.PayloadDetails}
 """;
@@ -44,8 +45,9 @@ Packet Length: {packet.PacketLength}
     {
         Dispatcher.Invoke(() =>
         {
-            DetailsBox.Text =
+            DetailsBox.Text +=
 $"""
+
 Packet Length: {packet.TotalLength}
 Packet Type: {(BrokerPacketTypeEnum)packet.PacketType}
 Packet Seq: {packet.Sequence}

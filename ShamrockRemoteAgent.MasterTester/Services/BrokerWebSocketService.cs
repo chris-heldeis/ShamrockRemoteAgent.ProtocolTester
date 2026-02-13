@@ -1,5 +1,8 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Helpers;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
+using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.LoginRes;
+using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using System.Net.WebSockets;
 
 namespace ShamrockRemoteAgent.MasterTester.Services;
@@ -74,6 +77,30 @@ public class BrokerWebSocketService
                                 break;
                             case DataPacketTypeEnum.LOGIN_REQ:
                                 PacketBus.PublishLog("LOGIN_REQ received from Client");
+
+                                // Send LoginRes
+                                LoginRes payload = new LoginRes();
+                                payload.ResultCode.FieldData = LoginErrorCodeEnum.NO_ERROR;
+                                byte[] payloadBytes = payload.Serialize();
+
+                                // Build data packet
+                                var packet = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.LOGIN_RES,
+                                    PacketPayload = payloadBytes,
+                                    PacketLength = (uint)(4 + 1 + payloadBytes.Length)
+                                };
+
+                                byte[] packetBytes = packet.Serialize();
+                                // Wrap with Broker protocol
+                                byte[] brokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, packetBytes);
+
+                                await App.BrokerSocket.SendAsync(brokerPacket);
+                                // Publish to HexViewer
+                                PacketBus.Publish(packetBytes);
+                                PacketBus.PublishLog($"Sent LoginRes successfully!");
+
                                 break;
                             default:
                                 break;
