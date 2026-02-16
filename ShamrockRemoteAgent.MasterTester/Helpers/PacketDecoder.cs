@@ -2,13 +2,9 @@
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Interfaces;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShamrockRemoteAgent.MasterTester.Helpers
 {
@@ -22,11 +18,17 @@ namespace ShamrockRemoteAgent.MasterTester.Helpers
 
             object? payload = packet.PacketType switch
             {
-                DataPacketTypeEnum.PING_REQ =>
+                DataPacketTypeEnum.PING_RES =>
                     PingReq.Deserialize(),
 
                 DataPacketTypeEnum.LOGIN_REQ =>
                     LoginReq.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.LOGIN_ACK =>
+                    LoginAck.Deserialize(),
+
+                DataPacketTypeEnum.CLI_CON_RES =>
+                    ClientConnectRes.Deserialize(packet.PacketPayload),
 
                 _ => null
             };

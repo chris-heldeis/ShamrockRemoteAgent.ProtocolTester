@@ -1,6 +1,7 @@
 ﻿using ShamrockRemoteAgent.ClientTester.Models;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 
@@ -19,8 +20,14 @@ namespace ShamrockRemoteAgent.ClientTester.Helpers
                 DataPacketTypeEnum.PING_REQ =>
                     PingReq.Deserialize(),
 
-                DataPacketTypeEnum.LOGIN_REQ =>
-                    LoginReq.Deserialize(packet.PacketPayload),
+                DataPacketTypeEnum.LOGIN_RES =>
+                    LoginRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.CLI_CON_REQ =>
+                    ClientConnectReq.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.CLI_CON_ACK =>
+                    ClientConnectAck.Deserialize(),
 
                 _ => null
             };

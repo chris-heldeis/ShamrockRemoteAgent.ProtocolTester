@@ -2,6 +2,7 @@
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.LoginRes;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using System.Net.WebSockets;
 
@@ -75,33 +76,59 @@ public class BrokerWebSocketService
                             case DataPacketTypeEnum.PING_RES:
                                 PacketBus.PublishLog("PING_RES received from Client");
                                 break;
+
                             case DataPacketTypeEnum.LOGIN_REQ:
                                 PacketBus.PublishLog("LOGIN_REQ received from Client");
 
                                 // Send LoginRes
-                                LoginRes payload = new LoginRes();
-                                payload.ResultCode.FieldData = LoginErrorCodeEnum.NO_ERROR;
-                                byte[] payloadBytes = payload.Serialize();
+                                LoginRes loginResPayload = new LoginRes();
+                                loginResPayload.ResultCode.FieldData = LoginErrorCodeEnum.NO_ERRORS;
+                                byte[] loginResPayloadBytes = loginResPayload.Serialize();
 
                                 // Build data packet
-                                var packet = new DataPacket
+                                var loginResPacket = new DataPacket
                                 {
                                     PacketType = DataPacketTypeEnum.LOGIN_RES,
-                                    PacketPayload = payloadBytes,
-                                    PacketLength = (uint)(4 + 1 + payloadBytes.Length)
+                                    PacketPayload = loginResPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + loginResPayloadBytes.Length)
                                 };
 
-                                byte[] packetBytes = packet.Serialize();
+                                byte[] loginResPacketBytes = loginResPacket.Serialize();
                                 // Wrap with Broker protocol
-                                byte[] brokerPacket =
-                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, packetBytes);
+                                byte[] loginResBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, loginResPacketBytes);
 
-                                await App.BrokerSocket.SendAsync(brokerPacket);
+                                await App.BrokerSocket.SendAsync(loginResBrokerPacket);
                                 // Publish to HexViewer
-                                PacketBus.Publish(packetBytes);
+                                PacketBus.Publish(loginResPacketBytes);
                                 PacketBus.PublishLog($"Sent LoginRes successfully!");
 
                                 break;
+
+                            case DataPacketTypeEnum.CLI_CON_RES:
+                                PacketBus.PublishLog("CLI_CON_RES received from Client");
+                                ClientConnectAck cliConAckPayload = new ClientConnectAck();
+                                byte[] cliConAckpayloadBytes = cliConAckPayload.Serialize();
+
+                                // Build data packet
+                                var cliConAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.CLI_CON_ACK,
+                                    PacketPayload = cliConAckpayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + cliConAckpayloadBytes.Length)
+                                };
+
+                                byte[] cliConAckPacketBytes = cliConAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] cliConAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, cliConAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(cliConAckBrokerPacket);
+                                PacketBus.Publish(cliConAckPacketBytes);
+                                PacketBus.PublishLog($"Sent ClientConnectAck successfully");
+
+                                break;
+
                             default:
                                 break;
                         }

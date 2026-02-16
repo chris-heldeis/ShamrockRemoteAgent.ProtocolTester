@@ -1,6 +1,6 @@
 ﻿using ShamrockRemoteAgent.ClientTester.Helpers;
+using ShamrockRemoteAgent.TCPProtocol.Enums.Common;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
-using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.ClientConnectRes;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
@@ -109,14 +109,14 @@ namespace ShamrockRemoteAgent.ClientTester.Services
 
                                     // Build empty LOGIN_ACK payload
                                     LoginAck loginAckPayload = new LoginAck();
-                                    byte[] loginAckayloadBytes = loginAckPayload.Serialize();
+                                    byte[] loginAckpayloadBytes = loginAckPayload.Serialize();
 
                                     // Build data packet
                                     var loginResPacket = new DataPacket
                                     {
                                         PacketType = DataPacketTypeEnum.LOGIN_ACK,
-                                        PacketPayload = loginAckayloadBytes,
-                                        PacketLength = (uint)(4 + 1 + loginAckayloadBytes.Length)
+                                        PacketPayload = loginAckpayloadBytes,
+                                        PacketLength = (uint)(4 + 1 + loginAckpayloadBytes.Length)
                                     };
 
                                     byte[] packetBytes = loginResPacket.Serialize();
@@ -134,7 +134,7 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                 case DataPacketTypeEnum.CLI_CON_REQ:
                                     PacketBus.PublishLog("CLI_CON_REQ received from Master");
                                     ClientConnectRes payload = new ClientConnectRes();
-                                    payload.ResultCode.FieldData = ClientConnectErrorCodeEnum;
+                                    payload.ResultCode.FieldData = RPErrorCodeEnum.NO_ERRORS;
                                     byte[] cliConnResPayloadBytes = payload.Serialize();
 
                                     // Build data packet

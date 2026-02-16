@@ -63,7 +63,7 @@ namespace ShamrockRemoteAgent.MasterTester.ViewModels
                 // Build DataPacket
                 var packet = new DataPacket
                 {
-                    PacketType = DataPacketTypeEnum.CLI_CON_ACK,
+                    PacketType = DataPacketTypeEnum.CLI_CON_REQ,
                     PacketPayload = payloadBytes,
                     PacketLength = (uint)(4 + 1 + payloadBytes.Length)
                 };
