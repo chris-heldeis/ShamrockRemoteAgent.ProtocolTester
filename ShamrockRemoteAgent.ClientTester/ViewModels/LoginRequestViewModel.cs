@@ -145,7 +145,7 @@ namespace ShamrockRemoteAgent.ClientTester.ViewModels
                 await App.BrokerSocket.SendAsync(brokerPacket);
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent LoginReq successfully!");
+                PacketBus.PublishLog($"Sent LoginReq successfully");
             }
             catch (Exception ex)
             {

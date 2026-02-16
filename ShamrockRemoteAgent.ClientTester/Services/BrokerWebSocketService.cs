@@ -1,10 +1,11 @@
 ﻿using ShamrockRemoteAgent.ClientTester.Helpers;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
+using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.ClientConnectRes;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 using System.Net.WebSockets;
-using System.Text;
 
 namespace ShamrockRemoteAgent.ClientTester.Services
 {
@@ -102,6 +103,7 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                     await SendAsync(brokerSedingPacket);
 
                                     break;
+
                                 case DataPacketTypeEnum.LOGIN_RES:
                                     PacketBus.PublishLog("LOGIN_RES received from Master");
 
@@ -110,22 +112,48 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                     byte[] loginAckayloadBytes = loginAckPayload.Serialize();
 
                                     // Build data packet
-                                    var packet = new DataPacket
+                                    var loginResPacket = new DataPacket
                                     {
                                         PacketType = DataPacketTypeEnum.LOGIN_ACK,
                                         PacketPayload = loginAckayloadBytes,
                                         PacketLength = (uint)(4 + 1 + loginAckayloadBytes.Length)
                                     };
 
-                                    byte[] packetBytes = packet.Serialize();
+                                    byte[] packetBytes = loginResPacket.Serialize();
                                     // Wrap with Broker protocol
                                     byte[] brokerPacket =
                                         BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, packetBytes);
                                     await App.BrokerSocket.SendAsync(brokerPacket);
                                     // Publish to HexViewer
                                     PacketBus.Publish(packetBytes);
-                                    PacketBus.PublishLog($"Sent LoginAck successfully!");
+                                    PacketBus.PublishLog($"Sent LoginAck successfully");
                                     LoginHandshakeCompleted?.Invoke();
+
+                                    break;
+
+                                case DataPacketTypeEnum.CLI_CON_REQ:
+                                    PacketBus.PublishLog("CLI_CON_REQ received from Master");
+                                    ClientConnectRes payload = new ClientConnectRes();
+                                    payload.ResultCode.FieldData = ClientConnectErrorCodeEnum;
+                                    byte[] cliConnResPayloadBytes = payload.Serialize();
+
+                                    // Build data packet
+                                    var cliConResPacket = new DataPacket
+                                    {
+                                        PacketType = DataPacketTypeEnum.CLI_CON_RES,
+                                        PacketPayload = cliConnResPayloadBytes,
+                                        PacketLength = (uint)(4 + 1 + cliConnResPayloadBytes.Length)
+                                    };
+
+                                    byte[] cliConnResPacketBytes = cliConResPacket.Serialize();
+                                    // Wrap with Broker protocol
+                                    byte[] cliConnResBrokerPacket =
+                                        BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, cliConnResPacketBytes);
+
+                                    await App.BrokerSocket.SendAsync(cliConnResBrokerPacket);
+                                    // Publish to HexViewer
+                                    PacketBus.Publish(cliConnResPacketBytes);
+                                    PacketBus.PublishLog($"Sent ClientConnectRes successfully!");
 
                                     break;
                             }

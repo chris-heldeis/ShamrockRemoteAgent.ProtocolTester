@@ -2,13 +2,16 @@
 using ShamrockRemoteAgent.MasterTester.Models;
 using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
-using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ShamrockRemoteAgent.MasterTester.Views;
 
 public partial class HexViewerView : UserControl
 {
+    /// <summary>
+    /// Interaction logic for HexViewerView.xaml
+    /// </summary>
     public HexViewerView()
     {
         InitializeComponent();
@@ -17,6 +20,7 @@ public partial class HexViewerView : UserControl
         PacketBus.PacketDecoded += OnPacketDecoded;
         PacketBus.BrokerPacketDecoded += OnBrokerPacketDecoded;
         PacketBus.LogPublished += OnLog;
+        this.Unloaded += HexViewerView_Unloaded;
     }
     private void OnPacketBuilt(byte[] data)
     {
@@ -69,5 +73,14 @@ Packet Payload: {packet.Payload}
     {
         HexBox.AppendText(text + Environment.NewLine);
         HexBox.ScrollToEnd();
+    }
+    private void HexViewerView_Unloaded(object sender, RoutedEventArgs e)
+    {
+        PacketBus.PacketBuilt -= OnPacketBuilt;
+        PacketBus.PacketDecoded -= OnPacketDecoded;
+        PacketBus.BrokerPacketDecoded -= OnBrokerPacketDecoded;
+        PacketBus.LogPublished -= OnLog;
+
+        this.Unloaded -= HexViewerView_Unloaded; // optional cleanup
     }
 }
