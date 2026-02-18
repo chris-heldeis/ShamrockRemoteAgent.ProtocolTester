@@ -31,7 +31,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 ushort msgSize = (ushort)clientMsg.Length;
 
                 // Build payload
-                var payload = new SendMessageReq
+                SendMessageReq payload = new SendMessageReq
                 {
                     ClientID = { FieldData = clientId },
                     MsgSize = { FieldData = msgSize },
@@ -60,7 +60,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent SendMessageRequest successfully!");
+                PacketBus.PublishLog($"Sent TX_FRAME_REQ successfully!");
             }
             catch (Exception ex)
             {
@@ -72,10 +72,16 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             input = input.Trim();
 
-            // Hex input (space separated)
-            if (input.Contains(" "))
+            // Try detect HEX format: "01 0A FF"
+            string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            bool isHex = parts.Length > 1 &&
+                         parts.All(p =>
+                             p.Length <= 2 &&
+                             p.All(c => Uri.IsHexDigit(c)));
+
+            if (isHex)
             {
-                string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 byte[] bytes = new byte[parts.Length];
 
                 for (int i = 0; i < parts.Length; i++)
@@ -84,6 +90,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 return bytes;
             }
 
+            // Otherwise treat as ASCII text
             return Encoding.ASCII.GetBytes(input);
         }
     }
