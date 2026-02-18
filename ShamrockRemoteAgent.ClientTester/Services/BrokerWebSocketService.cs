@@ -3,6 +3,7 @@ using ShamrockRemoteAgent.TCPProtocol.Enums.Common;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 using System.Net.WebSockets;
@@ -133,9 +134,9 @@ namespace ShamrockRemoteAgent.ClientTester.Services
 
                                 case DataPacketTypeEnum.CLI_CON_REQ:
                                     PacketBus.PublishLog("CLI_CON_REQ received from Master");
-                                    ClientConnectRes payload = new ClientConnectRes();
-                                    payload.ResultCode.FieldData = RPErrorCodeEnum.NO_ERRORS;
-                                    byte[] cliConnResPayloadBytes = payload.Serialize();
+                                    ClientConnectRes cliConResPayload = new ClientConnectRes();
+                                    cliConResPayload.ResultCode.FieldData = RPErrorCodeEnum.NO_ERRORS;
+                                    byte[] cliConnResPayloadBytes = cliConResPayload.Serialize();
 
                                     // Build data packet
                                     var cliConResPacket = new DataPacket
@@ -153,7 +154,32 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                     await App.BrokerSocket.SendAsync(cliConnResBrokerPacket);
                                     // Publish to HexViewer
                                     PacketBus.Publish(cliConnResPacketBytes);
-                                    PacketBus.PublishLog($"Sent ClientConnectRes successfully!");
+                                    PacketBus.PublishLog($"Sent CLI_CON_RES successfully!");
+
+                                    break;
+
+                                case DataPacketTypeEnum.CLI_DISCON_REQ:
+                                    PacketBus.PublishLog("CLI_DISCON_REQ received from Master");
+                                    ClientDisconnectRes cliDisconResPayload = new ClientDisconnectRes();
+                                    cliDisconResPayload.ResultCode.FieldData= RPErrorCodeEnum.NO_ERRORS;
+                                    byte[] cliDisconResPayloadBytes = cliDisconResPayload.Serialize();
+
+                                    // Build data packet
+                                    var cliDisconResPacket = new DataPacket
+                                    {
+                                        PacketType = DataPacketTypeEnum.CLI_DISCON_RES,
+                                        PacketPayload = cliDisconResPayloadBytes,
+                                        PacketLength = (uint)(4 + 1 + cliDisconResPayloadBytes.Length)
+                                    };
+
+                                    byte[] cliDisconResPacketBytes = cliDisconResPacket.Serialize();
+                                    // Wrap with Broker protocol
+                                    byte[] cliDisconResBrokerPacket =
+                                        BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, cliDisconResPacketBytes);
+                                    await App.BrokerSocket.SendAsync(cliDisconResBrokerPacket);
+                                    // Publish to HexViewer
+                                    PacketBus.Publish(cliDisconResPacketBytes);
+                                    PacketBus.PublishLog($"Sent CLI_DISCON_RES successfully!");
 
                                     break;
                             }

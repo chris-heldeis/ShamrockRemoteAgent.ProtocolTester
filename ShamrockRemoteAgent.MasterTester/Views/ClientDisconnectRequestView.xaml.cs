@@ -25,13 +25,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                     return;
                 }
 
-                if (!App.BrokerSocket.IsConnected)
-                {
-                    await App.BrokerSocket.ConnectAsync(
-                        App.BrokerHost,
-                        App.BrokerPort,
-                        App.MasterId);
-                }
+                App.CheckConnect();
 
                 // Build payload using protocol model
                 var payload = new ClientDisconnectReq
@@ -57,7 +51,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent ClientDisconnectRequest (ClientID={clientId})");
+                PacketBus.PublishLog($"Sent CLI_DISCON_REQ successfully");
 
                 // Send
                 await App.BrokerSocket.SendAsync(brokerPacket);

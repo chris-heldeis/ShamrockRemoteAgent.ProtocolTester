@@ -18,13 +18,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             try
             {
-                if (!App.BrokerSocket.IsConnected)
-                {
-                    await App.BrokerSocket.ConnectAsync(
-                        App.BrokerHost,
-                        App.BrokerPort,
-                        App.MasterId);
-                }
+                App.CheckConnect();
 
                 // Build payload
                 var payload = new CloseReq();

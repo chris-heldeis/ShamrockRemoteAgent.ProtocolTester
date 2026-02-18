@@ -3,6 +3,7 @@ using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.LoginRes;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using System.Net.WebSockets;
 
@@ -125,7 +126,31 @@ public class BrokerWebSocketService
                                     BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, cliConAckPacketBytes);
                                 await App.BrokerSocket.SendAsync(cliConAckBrokerPacket);
                                 PacketBus.Publish(cliConAckPacketBytes);
-                                PacketBus.PublishLog($"Sent ClientConnectAck successfully");
+                                PacketBus.PublishLog($"Sent CLI_CON_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.CLI_DISCON_RES:
+                                PacketBus.PublishLog("CLI_DISCON_RES received from Client");
+                                ClientDisconnectAck cliDisconAckPayload = new ClientDisconnectAck();
+                                byte[] cliDisconAckpayloadBytes = cliDisconAckPayload.Serialize();
+
+                                // Build data packet
+                                var cliDisconAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.CLI_DISCON_ACK,
+                                    PacketPayload = cliDisconAckpayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + cliDisconAckpayloadBytes.Length)
+                                };
+
+                                byte[] cliDisconAckPacketBytes = cliDisconAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] cliDisconAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, cliDisconAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(cliDisconAckBrokerPacket);
+                                PacketBus.Publish(cliDisconAckPacketBytes);
+                                PacketBus.PublishLog($"Sent CLI_DISCON_ACK successfully");
 
                                 break;
 

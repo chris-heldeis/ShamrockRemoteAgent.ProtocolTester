@@ -1,7 +1,9 @@
 ﻿using ShamrockRemoteAgent.ClientTester.Models;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
+using ShamrockRemoteAgent.TCPProtocol.Interfaces;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 
@@ -29,6 +31,12 @@ namespace ShamrockRemoteAgent.ClientTester.Helpers
                 DataPacketTypeEnum.CLI_CON_ACK =>
                     ClientConnectAck.Deserialize(),
 
+                DataPacketTypeEnum.CLI_DISCON_REQ =>
+                    ClientDisconnectReq.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.CLI_DISCON_ACK =>
+                    ClientDisconnectAck.Deserialize(),
+
                 _ => null
             };
 
@@ -50,16 +58,22 @@ namespace ShamrockRemoteAgent.ClientTester.Helpers
             var sb = new System.Text.StringBuilder();
             sb.AppendLine("Payload Fields:");
 
-            var fieldsProp = payload.GetType().GetProperty("Fields");
-            if (fieldsProp?.GetValue(payload) is Array fields)
+            var properties = payload.GetType().GetProperties();
+
+            foreach (var prop in properties)
             {
-                foreach (var field in fields)
-                {
-                    var type = field.GetType();
-                    var name = type.GetProperty("FieldType")?.GetValue(field);
-                    var value = type.GetProperty("FieldData")?.GetValue(field);
-                    sb.AppendLine($"- {name}: {value}");
-                }
+                // We only care about properties of type IField
+                if (!typeof(IField).IsAssignableFrom(prop.PropertyType))
+                    continue;
+
+                var field = prop.GetValue(payload);
+                if (field == null)
+                    continue;
+
+                var fieldDataProp = field.GetType().GetProperty("FieldData");
+                var value = fieldDataProp?.GetValue(field);
+
+                sb.AppendLine($"- {prop.Name}: {value}");
             }
 
             return sb.ToString();

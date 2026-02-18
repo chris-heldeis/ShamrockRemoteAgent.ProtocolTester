@@ -4,12 +4,10 @@ using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.ClientConnectReq;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.LoginReq;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace ShamrockRemoteAgent.MasterTester.ViewModels
 {
-    public class ClientConnectRequestViewModel : INotifyPropertyChanged
+    public class ClientConnectRequestViewModel
     {
         public ushort DeviceID { get; set; }
 
@@ -86,15 +84,6 @@ namespace ShamrockRemoteAgent.MasterTester.ViewModels
             {
                 PacketBus.PublishLog($"ERROR: {ex.Message}");
             }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged(
-            [CallerMemberName] string? name = null)
-        {
-            PropertyChanged?.Invoke(this,
-                new PropertyChangedEventArgs(name));
         }
     }
 }

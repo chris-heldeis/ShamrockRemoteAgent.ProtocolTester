@@ -3,6 +3,7 @@ using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Interfaces;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 
@@ -29,6 +30,9 @@ namespace ShamrockRemoteAgent.MasterTester.Helpers
 
                 DataPacketTypeEnum.CLI_CON_RES =>
                     ClientConnectRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.CLI_DISCON_RES =>
+                    ClientDisconnectRes.Deserialize(packet.PacketPayload),
 
                 _ => null
             };

@@ -17,6 +17,17 @@ namespace ShamrockRemoteAgent.MasterTester
 
         public static BrokerWebSocketService BrokerSocket { get; }
             = new BrokerWebSocketService();
+
+        public static async void CheckConnect()
+        {
+            if (!BrokerSocket.IsConnected)
+            {
+                await BrokerSocket.ConnectAsync(
+                    BrokerHost,
+                    BrokerPort,
+                    MasterId);
+            }
+        }
     }
 
 }
