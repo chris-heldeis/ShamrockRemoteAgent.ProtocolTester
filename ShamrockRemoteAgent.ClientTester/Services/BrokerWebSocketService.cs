@@ -6,6 +6,8 @@ using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 using System.Net.WebSockets;
 
 namespace ShamrockRemoteAgent.ClientTester.Services
@@ -180,6 +182,54 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                     // Publish to HexViewer
                                     PacketBus.Publish(cliDisconResPacketBytes);
                                     PacketBus.PublishLog($"Sent CLI_DISCON_RES successfully!");
+
+                                    break;
+
+                                case DataPacketTypeEnum.TX_FRAME_REQ:
+                                    PacketBus.PublishLog("TX_FRAME_REQ received from Master");
+                                    SendMessageRes txFrameResPayload = new SendMessageRes();
+                                    txFrameResPayload.ResultCode.FieldData = RPErrorCodeEnum.NO_ERRORS;
+                                    byte[] txFrameResPayloadBytes = txFrameResPayload.Serialize();
+
+                                    // Build data packet
+                                    var txFrameResPacket = new DataPacket
+                                    {
+                                        PacketType = DataPacketTypeEnum.TX_FRAME_RES,
+                                        PacketPayload = txFrameResPayloadBytes,
+                                        PacketLength = (uint)(4 + 1 + txFrameResPayloadBytes.Length)
+                                    };
+
+                                    byte[] txFrameResPacketBytes = txFrameResPacket.Serialize();
+                                    // Wrap with Broker protocol
+                                    byte[] txFrameResBrokerPacket = 
+                                        BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, txFrameResPacketBytes);
+                                    // Publish to HexViewer
+                                    PacketBus.Publish(txFrameResPacketBytes);
+                                    PacketBus.PublishLog($"Sent TX_FRAME_RES successfully!");
+
+                                    break;
+
+                                case DataPacketTypeEnum.RX_FRAME_REQ:
+                                    PacketBus.PublishLog("RX_FRAME_REQ received from Master");
+                                    ReadMessageRes rxFrameResPayload = new ReadMessageRes();
+                                    rxFrameResPayload.ResultCode.FieldData = RPErrorCodeEnum.NO_ERRORS;
+                                    byte[] rxFrameResPayloadBytes = rxFrameResPayload.Serialize();
+
+                                    // Build data packet
+                                    var rxFrameResPacket = new DataPacket
+                                    {
+                                        PacketType = DataPacketTypeEnum.RX_FRAME_RES,
+                                        PacketPayload = rxFrameResPayloadBytes,
+                                        PacketLength = (uint)(4 + 1 + rxFrameResPayloadBytes.Length)
+                                    };
+
+                                    byte[] rxFrameResPacketBytes = rxFrameResPacket.Serialize();
+                                    // Wrap with Broker protocol
+                                    byte[] rxFrameResBrokerPacket =
+                                        BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, rxFrameResPacketBytes);
+                                    // Publish to HexViewer
+                                    PacketBus.Publish(rxFrameResPacketBytes);
+                                    PacketBus.PublishLog($"Sent RX_FRAME_RES successfully!");
 
                                     break;
                             }

@@ -5,6 +5,8 @@ using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 using System.Net.WebSockets;
 
 namespace ShamrockRemoteAgent.MasterTester.Services;
@@ -151,6 +153,54 @@ public class BrokerWebSocketService
                                 await App.BrokerSocket.SendAsync(cliDisconAckBrokerPacket);
                                 PacketBus.Publish(cliDisconAckPacketBytes);
                                 PacketBus.PublishLog($"Sent CLI_DISCON_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.TX_FRAME_RES:
+                                PacketBus.PublishLog("TX_FRAME_RES received from Client");
+                                SendMessageAck txFrameAckPayload = new SendMessageAck();
+                                byte[] txFrameAckPayloadBytes = txFrameAckPayload.Serialize();
+
+                                // Build data packet
+                                var txFrameAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.TX_FRAME_ACK,
+                                    PacketPayload = txFrameAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + txFrameAckPayloadBytes.Length)
+                                };
+
+                                byte[] txFrameAckPacketBytes = txFrameAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] txFrameAckBrokerPacket = 
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, txFrameAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(txFrameAckBrokerPacket);
+                                PacketBus.Publish(txFrameAckPacketBytes);
+                                PacketBus.PublishLog($"Sent TX_FRAME_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.RX_FRAME_RES:
+                                PacketBus.PublishLog("RX_FRAME_RES received from Client");
+                                ReadMessageAck rxFrameAckPayload = new ReadMessageAck();
+                                byte[] rxFrameAckPayloadBytes = rxFrameAckPayload.Serialize();
+
+                                // Build data packet
+                                var rxFrameAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.RX_FRAME_ACK,
+                                    PacketPayload = rxFrameAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + rxFrameAckPayloadBytes.Length)
+                                };
+
+                                byte[] rxFrameAckPacketBytes = rxFrameAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] rxFrameAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, rxFrameAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(rxFrameAckBrokerPacket);
+                                PacketBus.Publish(rxFrameAckPacketBytes);
+                                PacketBus.PublishLog($"Sent RX_FRAME_ACK successfully");
 
                                 break;
 
