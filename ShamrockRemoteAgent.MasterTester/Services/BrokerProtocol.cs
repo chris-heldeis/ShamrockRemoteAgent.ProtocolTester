@@ -1,5 +1,4 @@
-﻿using ShamrockRemoteAgent.MasterTester.Helpers;
-using System.Buffers.Binary;
+﻿using System.Buffers.Binary;
 
 namespace ShamrockRemoteAgent.MasterTester.Services
 {

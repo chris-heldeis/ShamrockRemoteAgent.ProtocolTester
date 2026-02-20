@@ -18,9 +18,10 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             try
             {
-                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId))
+                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
                 {
-                    MessageBox.Show("Invalid Client ID");
+                    MessageBox.Show("Client ID must be greater than 0.");
+                    ClientIdBox.Focus();
                     return;
                 }
 

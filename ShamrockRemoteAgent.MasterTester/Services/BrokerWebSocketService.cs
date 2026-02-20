@@ -4,8 +4,14 @@ using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.LoginRes;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Close;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetErrorMsg;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetHardwareStatus;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetLastErrorMsg;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadDetailedVersion;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadVersion;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 using System.Net.WebSockets;
@@ -226,6 +232,150 @@ public class BrokerWebSocketService
                                 await App.BrokerSocket.SendAsync(txCmdAckBrokerPacket);
                                 PacketBus.Publish(txCmdAckPacketBytes);
                                 PacketBus.PublishLog($"Sent TX_CMD_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.READ_VER_RES:
+                                PacketBus.PublishLog("READ_VER_RES received from Client");
+                                ReadVersionAck readVerAckPayload = new ReadVersionAck();
+                                byte[] readVerAckPayloadBytes = readVerAckPayload.Serialize();
+
+                                // Build data packet
+                                var readVerAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.READ_VER_ACK,
+                                    PacketPayload = readVerAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + readVerAckPayloadBytes.Length)
+                                };
+
+                                byte[] readVerAckPacketBytes = readVerAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] readVerAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, readVerAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(readVerAckBrokerPacket);
+                                PacketBus.Publish(readVerAckPacketBytes);
+                                PacketBus.PublishLog($"Sent READ_VER_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.GET_ERR_MSG_RES:
+                                PacketBus.PublishLog("GET_ERR_MSG_RES received from Client");
+                                GetErrorMsgAck errMsgAckPayload = new GetErrorMsgAck();
+                                byte[] errMsgAckPayloadBytes = errMsgAckPayload.Serialize();
+
+                                // Build data packet
+                                var errMsgAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.GET_ERR_MSG_ACK,
+                                    PacketPayload = errMsgAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + errMsgAckPayloadBytes.Length)
+                                };
+
+                                byte[] errMsgAckPacketBytes = errMsgAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] errMsgAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, errMsgAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(errMsgAckBrokerPacket);
+                                PacketBus.Publish(errMsgAckPacketBytes);
+                                PacketBus.PublishLog($"Sent GET_ERR_MSG_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.GET_HW_STATUS_RES:
+                                PacketBus.PublishLog("GET_HW_STATUS_RES received from Client");
+                                GetHardwareStatusAck getHWAckPayload = new GetHardwareStatusAck();
+                                byte[] getHWAckPayloadBytes = getHWAckPayload.Serialize();
+
+                                // Build data packet
+                                var getHWAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.GET_HW_STATUS_ACK,
+                                    PacketPayload = getHWAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + getHWAckPayloadBytes.Length)
+                                };
+
+                                byte[] getHWAckPacketBytes = getHWAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] getHWAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, getHWAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(getHWAckBrokerPacket);
+                                PacketBus.Publish(getHWAckPacketBytes);
+                                PacketBus.PublishLog($"Sent GET_HW_STATUS_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.GET_LAST_ERR_MSG_RES:
+                                PacketBus.PublishLog("GET_LAST_ERR_MSG_RES received from Client");
+                                GetLastErrorMsgAck lastErrAckPayload = new GetLastErrorMsgAck();
+                                byte[] lastErrAckPayloadBytes = lastErrAckPayload.Serialize();
+
+                                // Build data packet
+                                var lastErrAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.GET_LAST_ERR_MSG_ACK,
+                                    PacketPayload = lastErrAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + lastErrAckPayloadBytes.Length)
+                                };
+
+                                byte[] lastErrAckPacketBytes = lastErrAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] lastErrAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, lastErrAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(lastErrAckBrokerPacket);
+                                PacketBus.Publish(lastErrAckPacketBytes);
+                                PacketBus.PublishLog($"Sent GET_LAST_ERR_MSG_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.READ_DET_VER_RES:
+                                PacketBus.PublishLog("READ_DET_VER_RES received from Client");
+                                ReadDetailedVersionAck detailVerAckPayload = new ReadDetailedVersionAck();
+                                byte[] detailVerAckPayloadBytes = detailVerAckPayload.Serialize();
+
+                                // Build data packet
+                                var detailVerAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.READ_DET_VER_ACK,
+                                    PacketPayload = detailVerAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + detailVerAckPayloadBytes.Length)
+                                };
+
+                                byte[] detailVerAckPacketBytes = detailVerAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] detailVerAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, detailVerAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(detailVerAckBrokerPacket);
+                                PacketBus.Publish(detailVerAckPacketBytes);
+                                PacketBus.PublishLog($"Sent READ_DET_VER_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.CLOSE_RES:
+                                PacketBus.PublishLog("CLOSE_RES received from Client");
+                                CloseAck closeAckPayload = new CloseAck();
+                                byte[] closeAckPayloadBytes = closeAckPayload.Serialize();
+
+                                // Build data packet
+                                var closeAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.CLOSE_ACK,
+                                    PacketPayload = closeAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + closeAckPayloadBytes.Length)
+                                };
+
+                                byte[] closeAckPacketBytes = closeAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] closeAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, closeAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(closeAckBrokerPacket);
+                                PacketBus.Publish(closeAckPacketBytes);
+                                PacketBus.PublishLog($"Sent CLOSE_ACK successfully");
 
                                 break;
 

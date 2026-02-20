@@ -1,8 +1,8 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Services;
-using ShamrockRemoteAgent.MasterTester.Helpers;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -22,6 +22,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
                 {
                     MessageBox.Show("Client ID must be greater than 0.");
+                    ClientIdBox.Focus();
                     return;
                 }
 
@@ -34,7 +35,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                     return;
                 }
 
-                byte[] clientMsg = MessageConverter.StringToBytes(ClientMsgBox.Text ?? "");
+                byte[] clientMsg = Encoding.UTF8.GetBytes(ClientMsgBox.Text ?? "");
 
                 ushort msgSize = (ushort)clientMsg.Length;
 

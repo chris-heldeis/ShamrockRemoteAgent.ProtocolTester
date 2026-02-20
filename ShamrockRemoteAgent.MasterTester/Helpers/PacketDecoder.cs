@@ -4,9 +4,15 @@ using ShamrockRemoteAgent.TCPProtocol.Interfaces;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Close;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetErrorMsg;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetHardwareStatus;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetLastErrorMsg;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadDetailedVersion;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadVersion;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 
@@ -46,6 +52,24 @@ namespace ShamrockRemoteAgent.MasterTester.Helpers
                 DataPacketTypeEnum.TX_CMD_RES =>
                     SendCommandRes.Deserialize(packet.PacketPayload),
 
+                DataPacketTypeEnum.READ_VER_RES =>
+                    ReadVersionRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.GET_ERR_MSG_RES =>
+                    GetErrorMsgRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.GET_HW_STATUS_RES =>
+                    GetHardwareStatusRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.GET_LAST_ERR_MSG_RES =>
+                    GetLastErrorMsgRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.READ_DET_VER_RES =>
+                    ReadDetailedVersionRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.CLOSE_RES =>
+                    CloseRes.Deserialize(packet.PacketPayload),
+
                 _ => null
             };
 
@@ -81,8 +105,14 @@ namespace ShamrockRemoteAgent.MasterTester.Helpers
 
                 var fieldDataProp = field.GetType().GetProperty("FieldData");
                 var value = fieldDataProp?.GetValue(field);
-
-                sb.AppendLine($"- {prop.Name}: {value}");
+                if (value != null && value.GetType() == typeof(byte[]))
+                {
+                    sb.AppendLine($"- {prop.Name}: {HexFormatter.ToHex((byte[])value)}");
+                }
+                else
+                {
+                    sb.AppendLine($"- {prop.Name}: {value}");
+                }
             }
 
             return sb.ToString();

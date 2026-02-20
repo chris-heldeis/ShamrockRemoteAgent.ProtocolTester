@@ -3,7 +3,6 @@ using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.ReadMessageReq;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -26,19 +25,22 @@ namespace ShamrockRemoteAgent.MasterTester.Views
             {
                 if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
                 {
-                    MessageBox.Show("Invalid Client ID");
+                    MessageBox.Show("Client ID must be greater than 0.");
+                    ClientIdBox.Focus();
                     return;
                 }
 
                 if (!ushort.TryParse(BufferSizeBox.Text, out ushort bufferSize) || bufferSize == 0)
                 {
                     MessageBox.Show("Invalid Buffer Size");
+                    BufferSizeBox.Focus();
                     return;
                 }
 
                 if (BlockOnReadBox.SelectedItem is not BlockOnReadTypeEnum blockType || blockType == 0)
                 {
                     MessageBox.Show("Select BlockOnRead Type");
+                    BlockOnReadBox.Focus();
                     return;
                 }
 

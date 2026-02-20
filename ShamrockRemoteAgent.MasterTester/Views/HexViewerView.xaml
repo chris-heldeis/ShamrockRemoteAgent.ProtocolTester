@@ -25,6 +25,7 @@
              Background="#020617"
              Foreground="#E5E7EB"
              IsReadOnly="True"
+             TextWrapping="Wrap"
              VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </UserControl>

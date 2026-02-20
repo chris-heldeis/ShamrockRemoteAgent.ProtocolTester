@@ -2,7 +2,6 @@
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetErrorMsg;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -22,6 +21,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 if (!ushort.TryParse(ErrorCodeBox.Text, out ushort errorCode))
                 {
                     MessageBox.Show("Invalid Error Code");
+                    ErrorCodeBox.Focus();
                     return;
                 }
 
@@ -51,7 +51,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent GetErrorMsgRequest successfully!");
+                PacketBus.PublishLog($"Sent GET_ERR_MSG_REQ successfully!");
             }
             catch (Exception ex)
             {

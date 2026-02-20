@@ -4,9 +4,15 @@ using ShamrockRemoteAgent.TCPProtocol.Interfaces;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Close;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetErrorMsg;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetHardwareStatus;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetLastErrorMsg;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadDetailedVersion;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadVersion;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 
@@ -58,6 +64,42 @@ namespace ShamrockRemoteAgent.ClientTester.Helpers
                 DataPacketTypeEnum.TX_CMD_ACK =>
                     SendCommandAck.Deserialize(),
 
+                DataPacketTypeEnum.READ_VER_REQ =>
+                    ReadVersionReq.Deserialize(),
+
+                DataPacketTypeEnum.READ_VER_ACK =>
+                    ReadVersionAck.Deserialize(),
+
+                DataPacketTypeEnum.GET_ERR_MSG_REQ =>
+                    GetErrorMsgReq.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.GET_ERR_MSG_ACK =>
+                    GetErrorMsgAck.Deserialize(),
+
+                DataPacketTypeEnum.GET_HW_STATUS_REQ =>
+                    GetHardwareStatusReq.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.GET_HW_STATUS_ACK =>
+                    GetHardwareStatusAck.Deserialize(),
+
+                DataPacketTypeEnum.GET_LAST_ERR_MSG_REQ =>
+                    GetLastErrorMsgReq.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.GET_LAST_ERR_MSG_ACK =>
+                    GetLastErrorMsgAck.Deserialize(),
+
+                DataPacketTypeEnum.READ_DET_VER_REQ =>
+                    ReadDetailedVersionReq.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.READ_DET_VER_ACK =>
+                    ReadDetailedVersionAck.Deserialize(),
+
+                DataPacketTypeEnum.CLOSE_REQ =>
+                    CloseReq.Deserialize(),
+
+                DataPacketTypeEnum.CLOSE_ACK =>
+                    CloseAck.Deserialize(),
+
                 _ => null
             };
 
@@ -94,7 +136,14 @@ namespace ShamrockRemoteAgent.ClientTester.Helpers
                 var fieldDataProp = field.GetType().GetProperty("FieldData");
                 var value = fieldDataProp?.GetValue(field);
 
-                sb.AppendLine($"- {prop.Name}: {value}");
+                if (value != null && value.GetType() == typeof(byte[]))
+                {
+                    sb.AppendLine($"- {prop.Name}: {HexFormatter.ToHex((byte[])value)}");
+                }
+                else
+                {
+                    sb.AppendLine($"- {prop.Name}: {value}");
+                }
             }
 
             return sb.ToString();

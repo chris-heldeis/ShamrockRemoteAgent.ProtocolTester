@@ -1,6 +1,5 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.MasterTester.Views;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 

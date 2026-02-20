@@ -39,7 +39,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 await App.BrokerSocket.SendAsync(brokerPacket);
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent ReadVersionRequest successfully!");
+                PacketBus.PublishLog($"Sent READ_VER_REQ successfully!");
             }
             catch (Exception ex)
             {

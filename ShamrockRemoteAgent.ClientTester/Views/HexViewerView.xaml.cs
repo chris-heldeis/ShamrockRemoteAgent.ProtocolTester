@@ -57,7 +57,7 @@ $"""
 Packet Length: {packet.TotalLength}
 Packet Type: {((BrokerPacketTypeEnum)packet.PacketType).ToString()}
 Packet Seq: {packet.Sequence}
-Packet Payload: {packet.Payload}
+Packet Payload: {HexFormatter.ToHex(packet.Payload)}
 """;
             });
         }

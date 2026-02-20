@@ -1,5 +1,4 @@
-﻿using ShamrockRemoteAgent.ClientTester.Models;
-using System.Buffers.Binary;
+﻿using System.Buffers.Binary;
 
 namespace ShamrockRemoteAgent.ClientTester.Services;
 

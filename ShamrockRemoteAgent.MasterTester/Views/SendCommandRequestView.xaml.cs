@@ -1,11 +1,8 @@
-﻿using ShamrockRemoteAgent.MasterTester.Helpers;
-using ShamrockRemoteAgent.MasterTester.Services;
+﻿using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
-using System;
-using System.Globalization;
-using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -48,7 +45,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 }
 
                 // CLIENT_CMD (hex or text)
-                byte[] commandPayload = MessageConverter.StringToBytes(CommandPayloadBox.Text ?? string.Empty);
+                byte[] commandPayload = Encoding.UTF8.GetBytes(CommandPayloadBox.Text ?? string.Empty);
 
                 ushort msgSize = (ushort)commandPayload.Length;
 

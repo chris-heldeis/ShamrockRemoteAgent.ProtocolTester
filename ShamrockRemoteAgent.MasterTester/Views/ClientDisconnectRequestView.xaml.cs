@@ -2,7 +2,6 @@
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -22,6 +21,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
                 if (!ushort.TryParse(ClientIdTextBox.Text, out ushort clientId) || clientId == 0)
                 {
                     PacketBus.PublishLog("Client ID must be greater than 0.");
+                    ClientIdTextBox.Focus();
                     return;
                 }
 

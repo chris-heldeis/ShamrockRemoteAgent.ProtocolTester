@@ -2,7 +2,6 @@
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadDetailedVersion;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,9 +18,10 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             try
             {
-                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId))
+                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
                 {
-                    PacketBus.PublishLog("Invalid Client ID");
+                    MessageBox.Show("Client ID must be greater than 0.");
+                    ClientIdBox.Focus();
                     return;
                 }
 
@@ -51,7 +51,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent ReadDetailedVersionReq (ClientID={clientId})");
+                PacketBus.PublishLog($"Sent READ_DET_VER_REQ successfully!");
 
                 // Send
                 await App.BrokerSocket.SendAsync(brokerPacket);

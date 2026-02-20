@@ -2,7 +2,6 @@
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.GetLastErrorMsg;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,15 +18,17 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             try
             {
-                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId))
+                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
                 {
-                    MessageBox.Show("Invalid Client ID");
+                    MessageBox.Show("Client ID must be greater than 0.");
+                    ClientIdBox.Focus();
                     return;
                 }
 
                 if (!ushort.TryParse(ErrorCodeBox.Text, out ushort errorCode))
                 {
                     MessageBox.Show("Invalid Error Code");
+                    ErrorCodeBox.Focus();
                     return;
                 }
 
@@ -58,7 +59,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent GetLastErrorMsgRequest successfully!");
+                PacketBus.PublishLog($"Sent GET_LAST_ERR_MSG_REQ successfully!");
             }
             catch (Exception ex)
             {
