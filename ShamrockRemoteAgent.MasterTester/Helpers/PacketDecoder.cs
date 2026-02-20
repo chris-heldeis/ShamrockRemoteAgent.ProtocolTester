@@ -7,6 +7,7 @@ using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 
 namespace ShamrockRemoteAgent.MasterTester.Helpers
@@ -41,6 +42,9 @@ namespace ShamrockRemoteAgent.MasterTester.Helpers
 
                 DataPacketTypeEnum.RX_FRAME_RES =>
                     ReadMessageRes.Deserialize(packet.PacketPayload),
+
+                DataPacketTypeEnum.TX_CMD_RES =>
+                    SendCommandRes.Deserialize(packet.PacketPayload),
 
                 _ => null
             };

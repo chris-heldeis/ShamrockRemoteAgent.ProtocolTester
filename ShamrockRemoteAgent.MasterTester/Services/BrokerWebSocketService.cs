@@ -6,6 +6,7 @@ using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientConnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 using System.Net.WebSockets;
 
@@ -201,6 +202,30 @@ public class BrokerWebSocketService
                                 await App.BrokerSocket.SendAsync(rxFrameAckBrokerPacket);
                                 PacketBus.Publish(rxFrameAckPacketBytes);
                                 PacketBus.PublishLog($"Sent RX_FRAME_ACK successfully");
+
+                                break;
+
+                            case DataPacketTypeEnum.TX_CMD_RES:
+                                PacketBus.PublishLog("TX_CMD_RES received from Client");
+                                SendCommandAck txCmdAckPayload = new SendCommandAck();
+                                byte[] txCmdAckPayloadBytes = txCmdAckPayload.Serialize();
+
+                                // Build data packet
+                                var txCmdAckPacket = new DataPacket
+                                {
+                                    PacketType = DataPacketTypeEnum.TX_CMD_ACK,
+                                    PacketPayload = txCmdAckPayloadBytes,
+                                    PacketLength = (uint)(4 + 1 + txCmdAckPayloadBytes.Length)
+                                };
+
+                                byte[] txCmdAckPacketBytes = txCmdAckPacket.Serialize();
+
+                                // Wrap with Broker protocol
+                                byte[] txCmdAckBrokerPacket =
+                                    BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, txCmdAckPacketBytes);
+                                await App.BrokerSocket.SendAsync(txCmdAckBrokerPacket);
+                                PacketBus.Publish(txCmdAckPacketBytes);
+                                PacketBus.PublishLog($"Sent TX_CMD_ACK successfully");
 
                                 break;
 

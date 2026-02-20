@@ -1,9 +1,8 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Services;
+using ShamrockRemoteAgent.MasterTester.Helpers;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
-using System;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -20,13 +19,22 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             try
             {
-                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId))
+                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
                 {
-                    MessageBox.Show("Invalid Client ID");
+                    MessageBox.Show("Client ID must be greater than 0.");
                     return;
                 }
 
-                byte[] clientMsg = ParseMessage(ClientMsgBox.Text);
+                // Payload Box
+                string payloadText = ClientMsgBox.Text?.Trim() ?? "";
+                if (string.IsNullOrEmpty(payloadText))
+                {
+                    MessageBox.Show("Message payload cannot be empty.");
+                    ClientMsgBox.Focus();
+                    return;
+                }
+
+                byte[] clientMsg = MessageConverter.StringToBytes(ClientMsgBox.Text ?? "");
 
                 ushort msgSize = (ushort)clientMsg.Length;
 
@@ -66,32 +74,6 @@ namespace ShamrockRemoteAgent.MasterTester.Views
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
-        }
-
-        private byte[] ParseMessage(string input)
-        {
-            input = input.Trim();
-
-            // Try detect HEX format: "01 0A FF"
-            string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-            bool isHex = parts.Length > 1 &&
-                         parts.All(p =>
-                             p.Length <= 2 &&
-                             p.All(c => Uri.IsHexDigit(c)));
-
-            if (isHex)
-            {
-                byte[] bytes = new byte[parts.Length];
-
-                for (int i = 0; i < parts.Length; i++)
-                    bytes[i] = Convert.ToByte(parts[i], 16);
-
-                return bytes;
-            }
-
-            // Otherwise treat as ASCII text
-            return Encoding.ASCII.GetBytes(input);
         }
     }
 }

@@ -41,6 +41,12 @@ namespace ShamrockRemoteAgent.MasterTester.ViewModels
                 return false;
             }
 
+            if ((int)SelfPacketize == 0)
+            {
+                error = "SelfPacketize must be selected.";
+                return false;
+            }
+
             return true;
         }
 

@@ -155,10 +155,9 @@
                     <ComboBox x:Name="BlockOnReadBox"
                               Style="{StaticResource DarkComboBoxStyle}"
                               ItemContainerStyle="{StaticResource DarkComboBoxItemStyle}"
+                              SelectedIndex="0"
                               FontSize="18"
                               Height="36">
-                        <ComboBoxItem Content="BLOCKING_IO"/>
-                        <ComboBoxItem Content="NON_BLOCKING_IO"/>
                     </ComboBox>
                 </StackPanel>
 

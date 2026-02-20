@@ -7,6 +7,7 @@ using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ClientDisconnect;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Login;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.Ping;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
+using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendMessage;
 using System.Net.WebSockets;
 
@@ -203,6 +204,7 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                     // Wrap with Broker protocol
                                     byte[] txFrameResBrokerPacket = 
                                         BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, txFrameResPacketBytes);
+                                    await App.BrokerSocket.SendAsync(txFrameResBrokerPacket);
                                     // Publish to HexViewer
                                     PacketBus.Publish(txFrameResPacketBytes);
                                     PacketBus.PublishLog($"Sent TX_FRAME_RES successfully!");
@@ -213,6 +215,10 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                     PacketBus.PublishLog("RX_FRAME_REQ received from Master");
                                     ReadMessageRes rxFrameResPayload = new ReadMessageRes();
                                     rxFrameResPayload.ResultCode.FieldData = RPErrorCodeEnum.NO_ERRORS;
+                                    byte[] apiMsgData = MessageConverter.StringToBytes("This is testing api message of the RX_FRAME_RES");
+                                    rxFrameResPayload.MsgSize.FieldData = apiMsgData.Length;
+                                    rxFrameResPayload.ApiMsg.FieldData = apiMsgData;
+
                                     byte[] rxFrameResPayloadBytes = rxFrameResPayload.Serialize();
 
                                     // Build data packet
@@ -227,9 +233,35 @@ namespace ShamrockRemoteAgent.ClientTester.Services
                                     // Wrap with Broker protocol
                                     byte[] rxFrameResBrokerPacket =
                                         BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, rxFrameResPacketBytes);
+                                    await App.BrokerSocket.SendAsync(rxFrameResBrokerPacket);
                                     // Publish to HexViewer
                                     PacketBus.Publish(rxFrameResPacketBytes);
                                     PacketBus.PublishLog($"Sent RX_FRAME_RES successfully!");
+
+                                    break;
+
+                                case DataPacketTypeEnum.TX_CMD_REQ:
+                                    PacketBus.PublishLog("TX_CMD_REQ received from Master");
+                                    SendCommandRes txCmdResPayload = new SendCommandRes();
+                                    txCmdResPayload.ResultCode.FieldData = RPErrorCodeEnum.NO_ERRORS;
+                                    byte[] txCmdResPayloadBytes = txCmdResPayload.Serialize();
+
+                                    // Build data packet
+                                    var txCmdResPacket = new DataPacket
+                                    {
+                                        PacketType = DataPacketTypeEnum.TX_CMD_RES,
+                                        PacketPayload = txCmdResPayloadBytes,
+                                        PacketLength = (uint)(4 + 1 + txCmdResPayloadBytes.Length)
+                                    };
+
+                                    byte[] txCmdResPacketBytes = txCmdResPacket.Serialize();
+                                    // Wrap with Broker protocol
+                                    byte[] txCmdResBrokerPacket =
+                                        BrokerProtocol.Encode(BrokerPacketTypeEnum.COM_DATA, txCmdResPacketBytes);
+                                    await App.BrokerSocket.SendAsync(txCmdResBrokerPacket);
+                                    // Publish to HexViewer
+                                    PacketBus.Publish(txCmdResPacketBytes);
+                                    PacketBus.PublishLog($"Sent TX_CMD_RES successfully!");
 
                                     break;
                             }

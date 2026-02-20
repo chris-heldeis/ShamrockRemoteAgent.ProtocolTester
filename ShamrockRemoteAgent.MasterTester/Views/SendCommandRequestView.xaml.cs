@@ -1,4 +1,5 @@
-﻿using ShamrockRemoteAgent.MasterTester.Services;
+﻿using ShamrockRemoteAgent.MasterTester.Helpers;
+using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.SendCommand;
@@ -21,41 +22,33 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             try
             {
-                // CLIENT_ID
-                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId))
-                {
-                    MessageBox.Show("Invalid Client ID");
-                    return;
-                }
-
                 // CMD_NUM
                 if (!ushort.TryParse(CommandNumBox.Text, out ushort cmdNum))
                 {
                     MessageBox.Show("Invalid Command Number");
+                    CommandNumBox.Focus();
+                    return;
+                }
+
+                // CLIENT_ID
+                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
+                {
+                    MessageBox.Show("Client ID must be greater than 0.");
+                    ClientIdBox.Focus();
+                    return;
+                }
+
+                // Payload Box
+                string payloadText = CommandPayloadBox.Text?.Trim() ?? string.Empty;
+                if (string.IsNullOrEmpty(payloadText))
+                {
+                    MessageBox.Show("Command payload cannot be empty.");
+                    CommandPayloadBox.Focus();
                     return;
                 }
 
                 // CLIENT_CMD (hex or text)
-                byte[] commandPayload;
-                string rawText = CommandPayloadBox.Text.Trim();
-
-                if (string.IsNullOrEmpty(rawText))
-                {
-                    commandPayload = Array.Empty<byte>();
-                }
-                else if (rawText.Contains(" "))
-                {
-                    // HEX input: "01 02 FF"
-                    commandPayload = rawText
-                        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(b => byte.Parse(b, NumberStyles.HexNumber))
-                        .ToArray();
-                }
-                else
-                {
-                    // Plain text
-                    commandPayload = System.Text.Encoding.ASCII.GetBytes(rawText);
-                }
+                byte[] commandPayload = MessageConverter.StringToBytes(CommandPayloadBox.Text ?? string.Empty);
 
                 ushort msgSize = (ushort)commandPayload.Length;
 

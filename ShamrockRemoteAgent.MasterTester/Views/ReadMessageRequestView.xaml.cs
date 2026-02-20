@@ -1,5 +1,6 @@
 ﻿using ShamrockRemoteAgent.MasterTester.Services;
 using ShamrockRemoteAgent.TCPProtocol.Enums.Packets;
+using ShamrockRemoteAgent.TCPProtocol.Enums.Payloads.ReadMessageReq;
 using ShamrockRemoteAgent.TCPProtocol.Models.DataPackets;
 using ShamrockRemoteAgent.TCPProtocol.Models.Payloads.ReadMessage;
 using System;
@@ -14,34 +15,39 @@ namespace ShamrockRemoteAgent.MasterTester.Views
         {
             InitializeComponent();
 
-            // Default selection for BlockOnRead
-            BlockOnReadBox.SelectedIndex = 0;
+            BlockOnReadBox.ItemsSource =
+                Enum.GetValues(typeof(BlockOnReadTypeEnum))
+                    .Cast<BlockOnReadTypeEnum>();
         }
 
         private async void OnReadMessageClicked(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId))
+                if (!ushort.TryParse(ClientIdBox.Text, out ushort clientId) || clientId == 0)
                 {
                     MessageBox.Show("Invalid Client ID");
                     return;
                 }
 
-                if (!ushort.TryParse(BufferSizeBox.Text, out ushort bufferSize))
+                if (!ushort.TryParse(BufferSizeBox.Text, out ushort bufferSize) || bufferSize == 0)
                 {
                     MessageBox.Show("Invalid Buffer Size");
                     return;
                 }
 
-                byte blockValue = (byte)(BlockOnReadBox.SelectedIndex == 0 ? 0x01 : 0x00); // 0x01 = BLOCKING, 0x00 = NON_BLOCKING
+                if (BlockOnReadBox.SelectedItem is not BlockOnReadTypeEnum blockType || blockType == 0)
+                {
+                    MessageBox.Show("Select BlockOnRead Type");
+                    return;
+                }
 
                 // Build payload
                 var payload = new ReadMessageReq
                 {
                     ClientID = { FieldData = clientId },
                     BufferSize = { FieldData = bufferSize },
-                    BlockOnRead = { FieldData = blockValue },
+                    BlockOnRead = { FieldData = blockType },
                 };
 
                 byte[] payloadBytes = payload.Serialize();
@@ -64,7 +70,7 @@ namespace ShamrockRemoteAgent.MasterTester.Views
 
                 // Publish to HexViewer
                 PacketBus.Publish(packetBytes);
-                PacketBus.PublishLog($"Sent ReadMessageRequest successfully!");
+                PacketBus.PublishLog($"Sent RX_FRAME_REQ successfully!");
             }
             catch (Exception ex)
             {
