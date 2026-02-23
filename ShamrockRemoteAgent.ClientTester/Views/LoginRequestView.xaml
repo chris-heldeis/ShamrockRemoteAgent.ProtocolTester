@@ -201,11 +201,13 @@
                                    Foreground="#CBD5E1"
                                    Margin="0,0,0,6"/>
                         <ComboBox ItemsSource="{Binding ServiceTypeValues}"
+                                  x:Name="serviceTypeSelect"
                                   SelectedItem="{Binding ServiceType}"
                                   Style="{StaticResource DarkComboBoxStyle}"
                                   ItemContainerStyle="{StaticResource DarkComboBoxItemStyle}"
                                   Height="36"
-                                  FontSize="16"/>
+                                  FontSize="16" 
+                                  SelectionChanged="ComboBox_SelectionChanged"/>
                     </StackPanel>
 
                     <!-- Other Service -->
@@ -215,9 +217,11 @@
                                    Foreground="#CBD5E1"
                                    Margin="0,0,0,6"/>
                         <TextBox Text="{Binding OtherService}"
+                                 x:Name="OtherServiceText"
                                  MaxLength="256"
                                  Height="36"
                                  FontSize="16"
+                                 IsEnabled="False"
                                  Background="#020617"
                                  Foreground="#E5E7EB"
                                  BorderBrush="#334155"/>
