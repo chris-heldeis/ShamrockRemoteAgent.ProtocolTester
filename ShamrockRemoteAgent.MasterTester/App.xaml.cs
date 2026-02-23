@@ -13,8 +13,7 @@ namespace ShamrockRemoteAgent.MasterTester
 
         // Global WS config
         public static string BrokerHost { get; set; } = "localhost";
-        public static int BrokerPort { get; set; } = 8080;
-        public static int BrokerPort { get; set; } = 3000;
+        public static int BrokerPort { get; set; } = 5000;
 
         public static BrokerWebSocketService BrokerSocket { get; }
             = new BrokerWebSocketService();
